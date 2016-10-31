@@ -1,8 +1,7 @@
-package ua.com.ecity.repository;
+package ua.org.ecity.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-import ua.com.ecity.entities.City;
+import ua.org.ecity.entities.City;
 
 import java.util.List;
 

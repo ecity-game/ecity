@@ -1,4 +1,4 @@
-package ua.com.ecity.config;
+package ua.org.ecity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/css/**", "/index", "/hello", "/", "/index.html").permitAll()
+                .antMatchers("/css/**", "/index", "/hello", "/city", "/", "/index.html").permitAll()
                 .antMatchers("/user/**").hasRole("USER")
                 //.anyRequest().authenticated()
                 .and()
