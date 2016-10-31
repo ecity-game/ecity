@@ -1,4 +1,4 @@
-package ua.com.ecity;
+package ua.org.ecity;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package ua.com.ecity.config;
+package ua.org.ecity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

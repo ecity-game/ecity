@@ -1,9 +1,9 @@
-package ua.com.ecity.services;
+package ua.org.ecity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.com.ecity.entities.City;
-import ua.com.ecity.repository.CityRepository;
+import ua.org.ecity.entities.City;
+import ua.org.ecity.repository.CityRepository;
 
 import java.util.List;
 
