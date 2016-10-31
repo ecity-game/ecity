@@ -15,9 +15,17 @@ public class City {
     //private String description;
     //private Double longitude;
     //private Double latitude;
-    private Integer population;
+//    private Integer population;
     //private Date establishment;
+    private String url;
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Long getId() {
         return id;
@@ -27,9 +35,9 @@ public class City {
         return name;
     }
 
-    public Integer getPopulation() {
-        return population;
-    }
+//    public Integer getPopulation() {
+//        return population;
+//    }
 
     public void setId(Long id) {
         this.id = id;
@@ -39,7 +47,8 @@ public class City {
         this.name = name;
     }
 
-    public void setPopulation(Integer population) {
-        this.population = population;
-    }
+//    public void setPopulation(Integer population) {
+//        this.population = population;
+//    }
+
 }

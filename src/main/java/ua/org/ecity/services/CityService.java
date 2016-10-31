@@ -18,29 +18,29 @@ public class CityService {
     }
 
     public void addCities() {
-        City city = new City();
-        city.setName("Odessa");
-        city.setPopulation(1000);
-        cityRepository.save(city);
-
-        city = new City();
-        city.setName("Odessa");
-        city.setPopulation(2000);
-        cityRepository.save(city);
-
-        city = new City();
-        city.setName("Odessa");
-        city.setPopulation(3000);
-        cityRepository.save(city);
-
-        city = new City();
-        city.setName("Lviv");
-        city.setPopulation(1000);
-        cityRepository.save(city);
-
-        city = new City();
-        city.setName("Kyiv");
-        city.setPopulation(2000);
-        cityRepository.save(city);
+//        City city = new City();
+//        city.setName("Odessa");
+//        city.setPopulation(1000);
+//        cityRepository.save(city);
+//
+//        city = new City();
+//        city.setName("Odessa");
+//        city.setPopulation(2000);
+//        cityRepository.save(city);
+//
+//        city = new City();
+//        city.setName("Odessa");
+//        city.setPopulation(3000);
+//        cityRepository.save(city);
+//
+//        city = new City();
+//        city.setName("Lviv");
+//        city.setPopulation(1000);
+//        cityRepository.save(city);
+//
+//        city = new City();
+//        city.setName("Kyiv");
+//        city.setPopulation(2000);
+//        cityRepository.save(city);
     }
 }
