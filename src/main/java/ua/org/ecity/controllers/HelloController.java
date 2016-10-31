@@ -30,7 +30,7 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public List<City> hello() {
-        cityService.addCities();
+//        cityService.addCities();
         return cityService.getCitiesByName("Одесса");
     }
 
