@@ -31,7 +31,7 @@ public class HelloController {
     @RequestMapping("/hello")
     public List<City> hello() {
         cityService.addCities();
-        return cityService.getCitiesByName("Odessa");
+        return cityService.getCitiesByName("Одесса");
     }
 
     @RequestMapping("/another")
