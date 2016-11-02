@@ -28,9 +28,8 @@ public class HelloController {
         return cityService.getCitiesByName(name);
     }
 
-    @RequestMapping("/hello")
+    @RequestMapping("user/hello")
     public List<City> hello() {
-//        cityService.addCities();
         return cityService.getCitiesByName("Одесса");
     }
 

@@ -1,4 +1,4 @@
-package ua.com.ecity;
+package ua.org.ecity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
