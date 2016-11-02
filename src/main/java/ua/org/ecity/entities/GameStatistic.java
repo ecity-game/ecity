@@ -2,9 +2,10 @@ package ua.org.ecity.entities;
 
 import javax.persistence.*;
 import javax.xml.crypto.Data;
+import java.security.Timestamp;
 
 @Entity
-@Table(name = "games_statistics")
+@Table(name = "games_statstics")
 public class GameStatistic {
 
     @Id
@@ -13,7 +14,7 @@ public class GameStatistic {
     private int move_number;
     private int game_id;
     private int city_id;
-    private Data move_time;
+    private Timestamp move_time;
 
     public long getId() {
         return id;
@@ -47,11 +48,11 @@ public class GameStatistic {
         this.city_id = city_id;
     }
 
-    public Data getMove_time() {
+    public Timestamp getMove_time() {
         return move_time;
     }
 
-    public void setMove_time(Data move_time) {
+    public void setMove_time(Timestamp move_time) {
         this.move_time = move_time;
     }
 }

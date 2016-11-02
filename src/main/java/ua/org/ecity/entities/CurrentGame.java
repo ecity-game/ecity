@@ -2,6 +2,7 @@ package ua.org.ecity.entities;
 
 import javax.persistence.*;
 import javax.xml.crypto.Data;
+import java.security.Timestamp;
 
 @Entity
 @Table(name = "current_games")
@@ -10,7 +11,7 @@ public class CurrentGame {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Data date;
+    private Timestamp date;
     private String name;
     private String state;
 
@@ -22,13 +23,7 @@ public class CurrentGame {
         this.id = id;
     }
 
-    public Data getDate() {
-        return date;
-    }
 
-    public void setDate(Data date) {
-        this.date = date;
-    }
 
     public String getName() {
         return name;
@@ -44,5 +39,13 @@ public class CurrentGame {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 }
