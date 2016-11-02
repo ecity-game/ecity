@@ -4,19 +4,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.xml.crypto.Data;
 
-@Entity(name = "cities")
-public class City {
+@Entity(name = "current_games")
+public class CurrentGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
+    private Data date;
     private String name;
-    private String description;
-    private Double longitude;
-    private Double latitude;
-    private Integer population;
-    private Date establishment;
-
+    private String state;
+    
 }
