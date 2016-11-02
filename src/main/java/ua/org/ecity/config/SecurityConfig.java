@@ -18,9 +18,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasRole("USER")
                 //.anyRequest().authenticated()
                 .and()
-            .formLogin()
+                .httpBasic()
+                .and()
+                .csrf().disable();
+
+                /*
+                .formLogin()
                 .loginPage("/login").permitAll()
                 .failureUrl("/login-error").permitAll();
+                */
     }
 
     @Override
