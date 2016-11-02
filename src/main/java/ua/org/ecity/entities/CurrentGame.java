@@ -1,12 +1,10 @@
 package ua.org.ecity.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.xml.crypto.Data;
 
-@Entity(name = "current_games")
+@Entity
+@Table(name = "current_games")
 public class CurrentGame {
 
     @Id
@@ -15,5 +13,36 @@ public class CurrentGame {
     private Data date;
     private String name;
     private String state;
-    
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Data getDate() {
+        return date;
+    }
+
+    public void setDate(Data date) {
+        this.date = date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 }
