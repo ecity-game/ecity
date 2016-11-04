@@ -1,10 +1,7 @@
 package ua.org.ecity.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.services.CityService;
 
@@ -28,9 +25,14 @@ public class HelloController {
         return cityService.getCitiesByName(name);
     }
 
-    @RequestMapping("user/hello")
+    @RequestMapping("/user/hello")
     public List<City> hello() {
         return cityService.getCitiesByName("Одесса");
+    }
+
+    @RequestMapping(value = "/game/move", method = RequestMethod.POST)
+    public String hello(@RequestParam("city") String city) {
+        return "{\"massage\":\"City name is invalid\"}";
     }
 
     @RequestMapping("/another")
