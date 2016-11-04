@@ -30,10 +30,6 @@ public class HelloController {
         return cityService.getCitiesByName("Одесса");
     }
 
-    @RequestMapping(value = "/game/move", method = RequestMethod.POST)
-    public String hello(@RequestParam("city") String city) {
-        return "{\"massage\":\"City name is invalid\"}";
-    }
 
     @RequestMapping("/another")
     public String another() {
