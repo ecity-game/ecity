@@ -25,6 +25,11 @@ public class HelloController {
         return cityService.getCitiesByName(name);
     }
 
+    @RequestMapping("/cities")
+    public @ResponseBody List<City> city() {
+        return cityService.getCities();
+    }
+
     @RequestMapping("/user/hello")
     public List<City> hello() {
         return cityService.getCitiesByName("Одесса");

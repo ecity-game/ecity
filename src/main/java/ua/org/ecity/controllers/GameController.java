@@ -16,18 +16,28 @@ public class GameController {
     @Autowired
     CityService cityService;
 
+    @RequestMapping("/game/start")
+    public String startNewGame() {
+        return "{\"id\":\"777\"}";
+    }
+
     @RequestMapping(value = "/game/move/set", method = RequestMethod.POST)
-    public String set(
+    public String setMove(
             @RequestParam("id") int id,
             @RequestParam("city") String city) {
+
+        if (city.equals("Одесса")) {
+            return cityService.getCitiesByName("Одесса").toString();
+        }
+
         return "{\"id\":\"" + id + "\"," +
                 "\"city\":\"" + city + "\"," +
                 "\"massage\":\"City name is invalid\"}";
     }
 
     @RequestMapping(value = "/game/move/get", method = RequestMethod.POST)
-    public List<City> get(@RequestParam("id") int id) {
-        return cityService.getCitiesByName("Одесса");
+    public List<City> getMove(@RequestParam("id") int id) {
+        return cityService.getCitiesByName("Киев");
     }
 
 }
