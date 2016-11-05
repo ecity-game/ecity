@@ -17,6 +17,10 @@ public class CityService {
         return cityRepository.findByName(name);
     }
 
+    public List<City> getCities() {
+        return cityRepository.findAll();
+    }
+
     public void addCities() {
 //        City city = new City();
 //        city.setName("Odessa");
