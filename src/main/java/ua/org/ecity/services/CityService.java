@@ -16,6 +16,9 @@ public class CityService {
     public List<City> getCitiesByName(String name) {
         return cityRepository.findByName(name);
     }
+    public List<City> getCitiesByUrl(String name) {
+        return cityRepository.findByUrl(name);
+    }
 
     public void addCities() {
 //        City city = new City();
