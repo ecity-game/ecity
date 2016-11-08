@@ -23,14 +23,16 @@ public class GameService {
         return gameRepository.findByMoves(moves);
     }
 
+
     public String newGame (int player1) {
-        SessionFactory sessionFactory=null;
+        //SessionFactory sessionFactory=null;
         Game game = new Game();
         game.setFinished(false);
         game.setPlayer1(999);
         game.setFirst_player(999);
         game.setPlayer2(000);
-        sessionFactory.getCurrentSession().save(game);
+        gameRepository.save(game);
+        //sessionFactory.getCurrentSession().save(game);
 
         return "{\"id\":\"777\"}";
     }
