@@ -15,25 +15,28 @@ public class GameService {
     private GameRepository gameRepository;
     //private SessionFactory sessionFactory;
 
-    public List<Game> getGameById (long id) {
+    public List<Game> getGameById(long id) {
         return gameRepository.findById(id);
     }
 
-    public List<Game> getGameByMoves (Integer moves) {
+    public List<Game> getGameByMoves(Integer moves) {
         return gameRepository.findByMoves(moves);
     }
 
 
-    public String newGame (int player1) {
+    public String newGame(int player1) {
         //SessionFactory sessionFactory=null;
         Game game = new Game();
         game.setFinished(false);
         game.setPlayer1(999);
         game.setFirst_player(999);
-        game.setPlayer2(000);
+        game.setPlayer2(777);
         gameRepository.save(game);
-        //sessionFactory.getCurrentSession().save(game);
+        long temp = gameRepository.count();
 
-        return "{\"id\":\"777\"}";
+        //sessionFactory.getCurrentSession().save(game);
+        String str = String.valueOf(temp);
+        return str;
+        //return "{\"id\":\"777\"}";
     }
 }

@@ -9,4 +9,5 @@ public interface GameRepository extends CrudRepository<Game,Long>{
     List<Game> findById (Long id);
     List<Game> findByMoves (Integer moves);
     Game save (Game game);
+    long count();
 }
