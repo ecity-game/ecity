@@ -8,4 +8,5 @@ import java.util.List;
 public interface GameRepository extends CrudRepository<Game,Long>{
     List<Game> findById (Long id);
     List<Game> findByMoves (Integer moves);
+    String newGame (int player1);
 }
