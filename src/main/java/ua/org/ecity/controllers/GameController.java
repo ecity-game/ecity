@@ -27,6 +27,7 @@ public class GameController {
         return new Result(true);
     }
 
+    @Autowired
     @RequestMapping("/game/new")
     public String newGame() {
        gameService.newGame(999);

@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int player1;
     private int player2;
@@ -17,13 +17,6 @@ public class Game {
     private int start;
     private int end;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public int getPlayer1() {
         return player1;
