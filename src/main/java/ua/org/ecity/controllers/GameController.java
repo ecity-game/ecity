@@ -33,7 +33,7 @@ public class GameController {
     public String createNewGame (@AuthenticationPrincipal final UserDetails user){
         //echo
         //String temp = user.getUsername();
-        String str = gameService.newGame(123);
+        long str = gameService.newGame(123);
         //return "User: "+temp+"; GameId:"+str;
         //return "{\"id\":\"777\"}";
         return "{\"id\":"+str+"}";

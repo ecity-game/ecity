@@ -24,7 +24,7 @@ public class GameService {
     }
 
 
-    public String newGame(int player1) {
+    public Long newGame(int player1) {
         //SessionFactory sessionFactory=null;
         Game game = new Game();
         game.setFinished(false);
@@ -36,8 +36,9 @@ public class GameService {
         //game = (Game) gameRepository.findByPlayer1(999);
         //long temp = game.getId();
         //sessionFactory.getCurrentSession().save(game);
-        String str = String.valueOf(temp);
-        return str;
+        //String str = String.valueOf(temp);
+        //return str;
         //return "{\"id\":"+temp+"\"}";
+        return temp;
     }
 }
