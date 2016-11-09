@@ -23,7 +23,7 @@ public class CityService {
     public List<City> getCities() {
         return cityRepository.findAll();
     }
-    public City getCityByName(String name) {
+    public City getCity(String name) {
         return  cityRepository.getByName(name);
     }
 

@@ -13,11 +13,23 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    public List<Game> getGameById (long id) {
+    public List<Game> getGameById(long id) {
         return gameRepository.findById(id);
     }
 
-    public List<Game> getGameByMoves (Integer moves) {
+    public List<Game> getGameByMoves(Integer moves) {
         return gameRepository.findByMoves(moves);
+    }
+
+    public int newGame(int playerId) {
+
+        Game game = new Game();
+        game.setFinished(false);
+        game.setPlayer1(playerId);
+        game.setFirstPlayer(playerId);
+        game.setPlayer2(2);
+        gameRepository.save(game);
+
+        return game.getId();
     }
 }

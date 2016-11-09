@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private int player1;
     private int player2;
     private boolean finished;
@@ -17,11 +17,11 @@ public class Game {
     private int start;
     private int end;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,11 +57,11 @@ public class Game {
         this.moves = moves;
     }
 
-    public int getFirst_player() {
+    public int getFirstPlayer() {
         return first_player;
     }
 
-    public void setFirst_player(int first_player) {
+    public void setFirstPlayer(int first_player) {
         this.first_player = first_player;
     }
 
