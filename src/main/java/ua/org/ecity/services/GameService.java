@@ -33,10 +33,11 @@ public class GameService {
         game.setPlayer2(777);
         gameRepository.save(game);
         long temp = gameRepository.count();
-
+        //game = (Game) gameRepository.findByPlayer1(999);
+        //long temp = game.getId();
         //sessionFactory.getCurrentSession().save(game);
         String str = String.valueOf(temp);
         return str;
-        //return "{\"id\":\"777\"}";
+        //return "{\"id\":"+temp+"\"}";
     }
 }

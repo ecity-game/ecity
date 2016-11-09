@@ -17,6 +17,9 @@ public class Game {
     private int start;
     private int end;
 
+    public long getId() {
+        return id;
+    }
 
     public int getPlayer1() {
         return player1;

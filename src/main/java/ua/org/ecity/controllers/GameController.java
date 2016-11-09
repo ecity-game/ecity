@@ -30,11 +30,14 @@ public class GameController {
 
     @RequestMapping(value= "/game/new" , method = RequestMethod.POST)
     //public String echo (@PathVariable(value = "in")final String in, @AuthenticationPrincipal final UserDetails user){
-    public String echo (@AuthenticationPrincipal final UserDetails user){
-        String temp = user.getUsername();
+    public String createNewGame (@AuthenticationPrincipal final UserDetails user){
+        //echo
+        //String temp = user.getUsername();
         String str = gameService.newGame(123);
-        return "User:"+temp+"; GameId:"+str;
+        //return "User: "+temp+"; GameId:"+str;
         //return "{\"id\":\"777\"}";
+        return "{\"id\":"+str+"}";
+        //return str;
     }
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
