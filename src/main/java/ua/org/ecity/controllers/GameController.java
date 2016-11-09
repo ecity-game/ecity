@@ -28,15 +28,15 @@ public class GameController {
     }
 
 
-    @RequestMapping(value= "/game/new" , method = RequestMethod.POST)
+    @RequestMapping(value = "/game/new", method = RequestMethod.POST)
     //public String echo (@PathVariable(value = "in")final String in, @AuthenticationPrincipal final UserDetails user){
-    public String createNewGame (@AuthenticationPrincipal final UserDetails user){
+    public String createNewGame(@AuthenticationPrincipal final UserDetails user) {
         //echo
         //String temp = user.getUsername();
-        long str = gameService.newGame(123);
+        long id = gameService.newGame(123);
         //return "User: "+temp+"; GameId:"+str;
         //return "{\"id\":\"777\"}";
-        return "{\"id\":"+str+"}";
+        return "{\"id\":" + id + "}";
         //return str;
     }
 

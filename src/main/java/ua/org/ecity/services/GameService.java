@@ -32,13 +32,15 @@ public class GameService {
         game.setFirst_player(999);
         game.setPlayer2(777);
         gameRepository.save(game);
-        long temp = gameRepository.count();
+        //long temp = gameRepository.count();
+        long id = game.getId();
+        //long temp = gameRepository.getGameId(game);
         //game = (Game) gameRepository.findByPlayer1(999);
         //long temp = game.getId();
         //sessionFactory.getCurrentSession().save(game);
         //String str = String.valueOf(temp);
         //return str;
         //return "{\"id\":"+temp+"\"}";
-        return temp;
+        return id;
     }
 }
