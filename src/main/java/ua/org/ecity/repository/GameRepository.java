@@ -6,7 +6,7 @@ import ua.org.ecity.entities.Game;
 import java.util.List;
 
 public interface GameRepository extends CrudRepository<Game,Long>{
-    List<Game> findById (Long id);
+    Game findById (int id);
     List<Game> findByMoves (Integer moves);
     List<Game> findByPlayer1 (Integer moves);
     Game save (Game game);
