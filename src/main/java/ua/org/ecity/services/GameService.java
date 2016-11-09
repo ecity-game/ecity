@@ -13,8 +13,8 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    public List<Game> getGameById(long id) {
-        return gameRepository.findById(id);
+    public Game getGame(int gameId) {
+        return gameRepository.findById(gameId);
     }
 
     public List<Game> getGameByMoves(Integer moves) {

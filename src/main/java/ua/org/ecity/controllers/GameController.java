@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.City;
+import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.entities.Result;
 import ua.org.ecity.services.CityService;
@@ -50,12 +51,19 @@ public class GameController {
     }
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
-    public MoveResult move(@RequestParam("id") int id, @RequestParam("city") String city) {
+    public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
         MoveResult moveResult = new MoveResult();
 
-        if (cityService.getCity(city) == null) {
+        Game game = gameService.getGame(gameId);
+        if (game == null) {
             moveResult.setSuccess(false);
-            moveResult.setError("No city");
+            moveResult.setError("no such game");
+            return moveResult;
+        }
+
+        if (cityService.getCity(cityName) == null) {
+            moveResult.setSuccess(false);
+            moveResult.setError("no such city in the game database");
             return moveResult;
         }
 
