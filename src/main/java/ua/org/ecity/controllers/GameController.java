@@ -1,28 +1,43 @@
 package ua.org.ecity.controllers;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.entities.Result;
 import ua.org.ecity.services.CityService;
+import ua.org.ecity.entities.Game;
+import ua.org.ecity.services.GameService;
 
 @RestController
 public class GameController {
 
     @Autowired
     CityService cityService;
+    @Autowired
+    GameService gameService;
+
+    private SessionFactory sessionFactory;
 
     @RequestMapping("/login")
     public Result login() {
         return new Result(true);
     }
 
-    @RequestMapping("/game/new")
-    public String newGame() {
-        return "{\"id\":\"777\"}";
+
+    @RequestMapping(value = "/game/new", method = RequestMethod.POST)
+    //public String echo (@PathVariable(value = "in")final String in, @AuthenticationPrincipal final UserDetails user){
+    public String createNewGame(@AuthenticationPrincipal final UserDetails user) {
+        //echo
+        //String temp = user.getUsername();
+        long id = gameService.newGame(123);
+        //return "User: "+temp+"; GameId:"+str;
+        //return "{\"id\":\"777\"}";
+        return "{\"id\":" + id + "}";
+        //return str;
     }
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
@@ -42,5 +57,6 @@ public class GameController {
         return cityService.getCitiesByName("Киев");
     }
     */
+
 
 }
