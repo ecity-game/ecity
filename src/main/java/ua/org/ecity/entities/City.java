@@ -10,20 +10,19 @@ public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String name;
-    private String description;
-    private Double longitude;
-    private Double latitude;
-    private Integer population;
-    private Timestamp establishment;
+    private int longitude;
+    private int latitude;
+    private int population;
+    private Date establishment;
     private String url;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -43,43 +42,35 @@ public class City {
         this.url = url;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getLongitude() {
+    public int getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(int longitude) {
         this.longitude = longitude;
     }
 
-    public Double getLatitude() {
+    public int getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(int latitude) {
         this.latitude = latitude;
     }
 
-    public Integer getPopulation() {
+    public int getPopulation() {
         return population;
     }
 
-    public void setPopulation(Integer population) {
+    public void setPopulation(int population) {
         this.population = population;
     }
 
-    public Timestamp getEstablishment() {
+    public Date getEstablishment() {
         return establishment;
     }
 
-    public void setEstablishment(Timestamp establishment) {
+    public void setEstablishment(Date establishment) {
         this.establishment = establishment;
     }
 }

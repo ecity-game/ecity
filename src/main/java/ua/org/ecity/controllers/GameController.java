@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.entities.Result;
 import ua.org.ecity.services.CityService;
@@ -28,17 +29,24 @@ public class GameController {
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("id") int id, @RequestParam("city") String city) {
         MoveResult moveResult = new MoveResult();
+
+        if (cityService.getCityByName(city) == null) {
+            moveResult.setSuccess(false);
+            moveResult.setError("No city");
+            return moveResult;
+        }
+
         moveResult.setSuccess(true);
-        moveResult.setError("");
-        moveResult.setGeneratedCity("Киев");
-        moveResult.setPositionX(12);
-        moveResult.setPositionY(15);
+        City generatedCity = cityService.getCityByName("Киев");
+        moveResult.setGeneratedCity(generatedCity.getName());
+        moveResult.setPositionX(generatedCity.getLatitude());
+        moveResult.setPositionY(generatedCity.getLongitude());
         return moveResult;
     }
 
-   /*
-   @RequestMapping(value = "/game/move/get", method = RequestMethod.POST)
-   public List<City> getMove(@RequestParam("id") int id) {
+    /*
+    @RequestMapping(value = "/game/move/get", method = RequestMethod.POST)
+    public List<City> getMove(@RequestParam("id") int id) {
         return cityService.getCitiesByName("Киев");
     }
     */

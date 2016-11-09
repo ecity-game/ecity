@@ -23,6 +23,9 @@ public class CityService {
     public List<City> getCities() {
         return cityRepository.findAll();
     }
+    public City getCityByName(String name) {
+        return  cityRepository.getByName(name);
+    }
 
     public void addCities() {
 //        City city = new City();
