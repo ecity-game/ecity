@@ -32,6 +32,7 @@ public class HelloController {
         return cityService.getCities();
     }
 
+
     @RequestMapping("/names")
     public @ResponseBody List<Name> names() {
         List<City> cities = cityService.getCities();
