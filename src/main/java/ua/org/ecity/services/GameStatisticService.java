@@ -13,7 +13,7 @@ public class GameStatisticService {
     @Autowired
     private GameStatisticRepository gameStatisticRepository;
 
-    public List<GameStatistic> getGameStatisticById (Long id) {
+    public List<GameStatistic> getGameStatisticById(Long id) {
         return gameStatisticRepository.findById(id);
     }
 }
