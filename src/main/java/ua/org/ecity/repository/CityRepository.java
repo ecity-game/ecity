@@ -12,5 +12,5 @@ public interface CityRepository extends CrudRepository<City, Long> {
     City getByName (String name);
     City getById (int id);
     List<City> findAll();
-    void addCity(City city);
+   // void addCity(City city);
  }
