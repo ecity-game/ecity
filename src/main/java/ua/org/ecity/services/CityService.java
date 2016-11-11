@@ -27,6 +27,10 @@ public class CityService {
         return  cityRepository.getByName(name);
     }
 
+    public void addCity(City city) {
+        cityRepository.addCity(city);
+    }
+
     public void addCities() {
 //        City city = new City();
 //        city.setName("Odessa");

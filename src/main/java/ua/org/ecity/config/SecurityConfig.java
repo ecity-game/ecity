@@ -16,6 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/css/**", "/index", "/hello", "/city", "/cities", "/", "/index.html").permitAll()
                 .antMatchers("/login", "/user/**", "/game/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 //.anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -44,11 +45,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authManager) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder authManager, AuthenticationManagerBuilder adminManager) throws Exception {
         authManager
             .inMemoryAuthentication()
                 .withUser("user")
                 .password("password")
                 .roles("USER");
+
+        adminManager
+                .inMemoryAuthentication()
+                .withUser("admin")
+                .password("admin")
+                .roles("ADMIN");
+
+
     }
 }
