@@ -13,9 +13,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/css/**", "/index", "/hello", "/city", "/cities", "/", "/index.html").permitAll()
                 .antMatchers("/login", "/user/**", "/game/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 //.anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -32,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity
-            .ignoring()
+                .ignoring()
                 .antMatchers("/scripts/**/*.{js}")
                 .antMatchers("/node_modules/**")
                 .antMatchers("/assets/**")
@@ -44,11 +45,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authManager) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder authManager
+            , AuthenticationManagerBuilder authAdmin
+    ) throws Exception {
         authManager
-            .inMemoryAuthentication()
+                .inMemoryAuthentication()
                 .withUser("user")
                 .password("password")
                 .roles("USER");
+
+        authAdmin
+                .inMemoryAuthentication()
+                .withUser("admin")
+                .password("admin")
+                .roles("ADMIN");
+
     }
 }

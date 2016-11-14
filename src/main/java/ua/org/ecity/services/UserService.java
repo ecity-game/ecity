@@ -12,7 +12,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public User getUser(String login) {
-        return  userRepository.getByLogin(login);
+        return userRepository.getByLogin(login);
     }
 
 }
