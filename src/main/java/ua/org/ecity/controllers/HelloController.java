@@ -23,18 +23,29 @@ public class HelloController {
     */
 
     @RequestMapping("/city")
-    public @ResponseBody List<City> city(@RequestParam(value = "name") String name) {
+    public
+    @ResponseBody
+    List<City> city(@RequestParam(value = "name") String name) {
         return cityService.getCitiesByName(name);
     }
 
+    @RequestMapping("/city/{id}")
+    public City cityInfo(@PathVariable("id") int id) {
+        return cityService.getCityByID(id);
+    }
+
     @RequestMapping("/cities")
-    public @ResponseBody List<City> cities() {
+    public
+    @ResponseBody
+    List<City> cities() {
         return cityService.getCities();
     }
 
 
     @RequestMapping("/names")
-    public @ResponseBody List<Name> names() {
+    public
+    @ResponseBody
+    List<Name> names() {
         List<City> cities = cityService.getCities();
         List<Name> names = new ArrayList<>();
         for (City city : cities) {
