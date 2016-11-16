@@ -37,13 +37,13 @@ public class GameService {
 
     @Transactional
     public void findStartedGame() {
-        Game gtemp = findOpenUsersGame(3);
+        GameRepository gtemp = (GameRepository) find(3);
         gtemp.setFinished(true);
     }
 
 
-    @Query("SELECT g FROM games g WHERE g.player1 = (:player1) and g.finished=0")
-    public Game findOpenUsersGame(@Param("player1") int player1) {
+    @Query("SELECT g FROM Game g WHERE g.player1 = (:player1) and g.finished=0")
+    public Game find(@Param("player1") int player1) {
         return g;
     }
 }
