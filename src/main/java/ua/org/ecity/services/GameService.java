@@ -37,8 +37,9 @@ public class GameService {
 
     @Transactional
     public void findStartedGame() {
-        GameRepository gtemp = (GameRepository) find(3);
+        Game gtemp = find(3);
         gtemp.setFinished(true);
+        gameRepository.save(gtemp);
     }
 
 
