@@ -1,7 +1,10 @@
 package ua.org.ecity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.repository.GameRepository;
 
@@ -29,7 +32,18 @@ public class GameService {
         game.setFirstPlayer(playerId);
         game.setPlayer2(2);
         gameRepository.save(game);
-
         return game.getId();
+    }
+
+    @Transactional
+    public void findStartedGame() {
+        Game gtemp = findOpenUsersGame(3);
+        gtemp.setFinished(true);
+    }
+
+
+    @Query("SELECT g FROM games g WHERE g.player1 = (:player1) and g.finished=0")
+    public Game findOpenUsersGame(@Param("player1") int player1) {
+        return g;
     }
 }
