@@ -16,10 +16,11 @@ public class AdminController {
 
     @Autowired
     CityService cityService;
-    City city;
 
     @RequestMapping("/admin/cities")
-    public @ResponseBody List<City> cities() {
+    public
+    @ResponseBody
+    List<City> cities() {
         return cityService.getCities();
     }
 /*
