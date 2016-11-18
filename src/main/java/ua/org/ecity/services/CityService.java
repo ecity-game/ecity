@@ -29,6 +29,10 @@ public class CityService {
         return cityRepository.getByName(name);
     }
 
+    public City getCityByID(int id) {
+        return cityRepository.getById(id);
+    }
+
     // public void addCity(City city) {
     //     cityRepository.addCity(city);
     // }

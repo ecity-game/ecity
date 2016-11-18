@@ -29,6 +29,11 @@ public class HelloController {
         return cityService.getCitiesByName(name);
     }
 
+    @RequestMapping("/city/{id}")
+    public City cityInfo(@PathVariable("id") int id) {
+        return cityService.getCityByID(id);
+    }
+
     @RequestMapping("/cities")
     public
     @ResponseBody
