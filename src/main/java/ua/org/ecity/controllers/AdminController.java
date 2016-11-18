@@ -1,10 +1,13 @@
 package ua.org.ecity.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.services.CityService;
 
@@ -23,22 +26,37 @@ public class AdminController {
     List<City> cities() {
         return cityService.getCities();
     }
-/*
-    @RequestMapping("/admin/city")
-    public void addCity(@RequestParam("name") String name, @RequestParam("longitude") int longitude,
-                        @RequestParam("latitude") int latitude, @RequestParam("population") int population,
-                        @RequestParam("establishment") Date establishment, @RequestParam("url") String url) {
 
-        city.setId(2222);
-        city.setName(name);
-        city.setLatitude(latitude);
-        city.setLongitude(longitude);
-        city.setPopulation(population);
-        city.setEstablishment(establishment);
-        city.setUrl(url);
+    @RequestMapping("/admin/city/delete/{id}")
+    public String deleteCity(@PathVariable("id") Integer id) {
 
-        cityService.addCity(city);
+        cityService.deleteCity(id);
+        return "successfully";
     }
-    */
 
+    @RequestMapping(value = "/admin/city/add", method = RequestMethod.POST)
+    //@ResponseBody
+    public String addCity(@RequestParam("city") String city) {
+
+
+        parse(city);
+        return city;
+    }
+
+    private void parse (String string) {
+        City city = new City();
+        String url = string;
+        String[] str = string.split(",");
+        for(String temp : str) {
+            str = temp.split(":");
+        }
+        city.setName("name");
+        city.setLongitude(1);
+        city.setLatitude(1);
+        city.setPopulation(1);
+        city.setEstablishment(null);
+        city.setUrl(url);
+        cityService.saveCity(city);
+
+    }
 }

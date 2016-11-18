@@ -1,7 +1,6 @@
 package ua.org.ecity.entities;
 
 import javax.persistence.*;
-import java.security.Timestamp;
 import java.util.Date;
 
 @Entity
