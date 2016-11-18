@@ -35,16 +35,29 @@ public class GameService {
         return game.getId();
     }
 
+
+//    @Transactional
+//    public String findGameForStatus(int userID) {
+//        Game gtemp = gameRepository.find(userId);
+//        if (gtemp == null) {
+//            return "There isn't start game";
+//        } else {
+//            String msg = ""
+//            return
+//        }
+//
+//    }
+
     @Transactional
-    public void findStartedGame() {
-        Game gtemp = find(3);
-        gtemp.setFinished(true);
-        gameRepository.save(gtemp);
+    public void findStartedGame(int userId) {
+        Game gtemp = gameRepository.find(userId);
+        if (gtemp != null) {
+            gtemp.setFinished(true);
+            gameRepository.save(gtemp);
+        }
+
     }
 
 
-    @Query("SELECT g FROM Game g WHERE g.player1 = (:player1) and g.finished=0")
-    public Game find(@Param("player1") int player1) {
-        return g;
-    }
+
 }
