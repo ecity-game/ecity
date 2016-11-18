@@ -13,6 +13,7 @@ import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.entities.Result;
+import ua.org.ecity.repository.GameRepository;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.GameService;
 import ua.org.ecity.services.UserService;
@@ -27,6 +28,9 @@ public class GameController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    GameRepository gameRepository;
+
     private SessionFactory sessionFactory;
 
     @RequestMapping("/login")
@@ -34,6 +38,19 @@ public class GameController {
         return new Result(true);
     }
 
+
+    @RequestMapping("/game/status")
+    public String gameStatus(@AuthenticationPrincipal final UserDetails user) {
+        String userName = user.getUsername();
+        System.out.println("userName = " + userName);
+        int userId = userService.getUser(userName).getId();
+        Game gameTemp = gameRepository.find(userId);
+        if (gameTemp == null) {
+            return "{\"id\":" + "NO" + "}";
+        } else {
+            return "{\"id started game\":" + gameTemp.getId() + "}";
+        }
+    }
 
     @RequestMapping("/game/new")
     public String createNewGame(@AuthenticationPrincipal final UserDetails user) {
@@ -43,11 +60,11 @@ public class GameController {
 
         int userId = userService.getUser(userName).getId();
         System.out.println("userId = " + userId);
-
+        gameService.findStartedGame(userId);
         int id = gameService.newGame(userId);
         System.out.println("id = " + id);
-
         return "{\"id\":" + id + "}";
+        //return "{\"id\":" + "111" + "}";
     }
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
