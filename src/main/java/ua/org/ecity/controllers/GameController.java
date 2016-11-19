@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.Game;
-import ua.org.ecity.entities.MoveResult;
-import ua.org.ecity.entities.Result;
+import ua.org.ecity.entities.*;
 import ua.org.ecity.repository.GameRepository;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.GameService;
+import ua.org.ecity.services.GameStatisticService;
 import ua.org.ecity.services.UserService;
 
 @RestController
@@ -27,9 +25,10 @@ public class GameController {
     GameService gameService;
     @Autowired
     UserService userService;
-
     @Autowired
     GameRepository gameRepository;
+    @Autowired
+    GameStatisticService gameStatisticService;
 
     private SessionFactory sessionFactory;
 
@@ -78,11 +77,14 @@ public class GameController {
             return moveResult;
         }
 
-        if (cityService.getCity(cityName) == null) {
+        City cityClient = cityService.getCity(cityName);
+        if (cityClient == null) {
             moveResult.setSuccess(false);
             moveResult.setError("no such city in the game database");
             return moveResult;
         }
+
+        gameStatisticService.addGameStatistic(game, cityClient);
 
         moveResult.setSuccess(true);
         City generatedCity = cityService.getCity("Киев");
