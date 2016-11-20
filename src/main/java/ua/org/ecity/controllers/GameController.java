@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.Game;
+import ua.org.ecity.entities.GameInfo;
+import ua.org.ecity.entities.GameStatus;
+import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.entities.Result;
 import ua.org.ecity.repository.GameRepository;
@@ -44,11 +47,18 @@ public class GameController {
         String userName = user.getUsername();
         System.out.println("userName = " + userName);
         int userId = userService.getUser(userName).getId();
-        Game gameTemp = gameRepository.find(userId);
+        Game gameTemp = gameService.findGameForStatus(userId);
+        GameInfo gameInfo = new GameInfo();
         if (gameTemp == null) {
-            return "{\"id\":" + "NO" + "}";
+            gameInfo.setId(null);
+            gameInfo.setErrorCode(GameStatus.DOESNT_EXIST.getCode());
+            gameInfo.setErrorMessage(GameStatus.DOESNT_EXIST.getMessage());
+            return gameInfo.toString();
         } else {
-            return "{\"id started game\":" + gameTemp.getId() + "}";
+            gameInfo.setId(gameTemp.getId());
+            gameInfo.setErrorCode(GameStatus.EXISTS.getCode());
+            gameInfo.setErrorMessage(GameStatus.EXISTS.getMessage());
+            return gameInfo.toString();
         }
     }
 
