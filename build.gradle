@@ -14,6 +14,9 @@ buildscript {
 group = 'ecity'
 
 apply plugin: 'java'
+compileJava {
+	sourceCompatibility = '1.8'
+}
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'

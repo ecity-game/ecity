@@ -11,8 +11,8 @@ public interface GameStatisticRepository extends CrudRepository<GameStatistic,Lo
 
     List<GameStatistic> findById(Long id);
 
-    @Query("from GameStatistic gs WHERE gs.game.id = (:game_id)")
-    List<GameStatistic> getLastMoveNumber(@Param("game_id") int game_id);
+    @Query("FROM GameStatistic gs WHERE gs.game.id = (:gameId)")
+    List<GameStatistic> getLastMoveNumber(@Param("gameId") int gameId);
 
     GameStatistic save(GameStatistic gameStatistic);
 }
