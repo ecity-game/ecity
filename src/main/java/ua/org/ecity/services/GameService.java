@@ -36,17 +36,16 @@ public class GameService {
     }
 
 
-//    @Transactional
-//    public String findGameForStatus(int userID) {
-//        Game gtemp = gameRepository.find(userId);
-//        if (gtemp == null) {
-//            return "There isn't start game";
-//        } else {
-//            String msg = ""
-//            return
-//        }
-//
-//    }
+    @Transactional
+    public Game findGameForStatus(int userID) {
+        Game gtemp = gameRepository.find(userID);
+        if (gtemp == null) {
+            return null;
+        } else {
+            return gtemp;
+        }
+
+    }
 
     @Transactional
     public void findStartedGame(int userId) {
@@ -55,9 +54,7 @@ public class GameService {
             gtemp.setFinished(true);
             gameRepository.save(gtemp);
         }
-
     }
-
 
 
 }

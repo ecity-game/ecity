@@ -43,11 +43,18 @@ public class GameController {
         String userName = user.getUsername();
         System.out.println("userName = " + userName);
         int userId = userService.getUser(userName).getId();
-        Game gameTemp = gameRepository.find(userId);
+        Game gameTemp = gameService.findGameForStatus(userId);
+        GameInfo gameInfo = new GameInfo();
         if (gameTemp == null) {
-            return "{\"id\":" + "NO" + "}";
+            gameInfo.setId(null);
+            gameInfo.setErrorCode(GameStatus.DOESNT_EXIST.getCode());
+            gameInfo.setErrorMessage(GameStatus.DOESNT_EXIST.getMessage());
+            return gameInfo.toString();
         } else {
-            return "{\"id started game\":" + gameTemp.getId() + "}";
+            gameInfo.setId(gameTemp.getId());
+            gameInfo.setErrorCode(GameStatus.EXISTS.getCode());
+            gameInfo.setErrorMessage(GameStatus.EXISTS.getMessage());
+            return gameInfo.toString();
         }
     }
 
