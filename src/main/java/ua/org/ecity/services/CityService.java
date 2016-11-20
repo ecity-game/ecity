@@ -2,6 +2,7 @@ package ua.org.ecity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.repository.CityRepository;
 
@@ -31,6 +32,15 @@ public class CityService {
 
     public City getCityByID(int id) {
         return cityRepository.getById(id);
+    }
+
+
+    public void saveCity(City city) {
+        cityRepository.save(city);
+    }
+
+    public void deleteCity(Integer id) {
+        cityRepository.delete(id);
     }
 
     // public void addCity(City city) {
