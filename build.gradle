@@ -18,6 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
+//apply plugin: 'checkstyle'
 
 jar {
 	baseName = 'server'
@@ -49,4 +50,8 @@ task buildDocker(type: Docker, dependsOn: build) {
 			into stageDir
 		}
 	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.2'
 }

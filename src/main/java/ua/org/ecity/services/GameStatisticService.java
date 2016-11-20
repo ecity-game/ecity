@@ -35,9 +35,9 @@ public class GameStatisticService {
 
         int moveNumber = getLastMoveNumber(game.getId());
 
-        gameStatistic.setMove_number(moveNumber + 1);
-        gameStatistic.setGame_id(game.getId());
-        gameStatistic.setCity_id(city.getId());
+        gameStatistic.setMoveNumber(moveNumber + 1);
+        gameStatistic.setGame(game);
+        gameStatistic.setCity(city);
 
         gameStatisticRepository.addGameStatistic(gameStatistic);
     }
