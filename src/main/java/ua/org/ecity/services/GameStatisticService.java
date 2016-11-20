@@ -2,6 +2,7 @@ package ua.org.ecity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.GameStatistic;
@@ -23,13 +24,15 @@ public class GameStatisticService {
     }
 
     public int getLastMoveNumber(int game_id) {
-        return gameStatisticRepository.getLastMoveNumber(game_id);
+        List<GameStatistic> gameStatistic = gameStatisticRepository.getLastMoveNumber(game_id);
+
+        return gameStatistic.stream()
+                .map(elem -> elem.getMoveNumber())
+                .max(Integer::compare)
+                .get();
     }
 
-    public void addGameStatistic(GameStatistic gameStatistic) {
-        gameStatisticRepository.addGameStatistic(gameStatistic);
-    }
-
+    @Transactional
     public void addGameStatistic(Game game, City city) {
         GameStatistic gameStatistic = new GameStatistic();
 
@@ -39,7 +42,7 @@ public class GameStatisticService {
         gameStatistic.setGame(game);
         gameStatistic.setCity(city);
 
-        gameStatisticRepository.addGameStatistic(gameStatistic);
+        gameStatisticRepository.save(gameStatistic);
     }
 
 }
