@@ -3,6 +3,7 @@ package ua.org.ecity.entities;
 import javax.persistence.*;
 import javax.xml.crypto.Data;
 import java.security.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "games_statstics")
@@ -11,10 +12,21 @@ public class GameStatistic {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int move_number;
-    private int game_id;
-    private int city_id;
-    private Timestamp move_time;
+
+    @Column(name = "move_number")
+    private int moveNumber;
+
+    @JoinColumn(name = "game_id")
+    @ManyToOne
+    private Game game;
+
+    @JoinColumn(name = "city_id")
+    @ManyToOne
+    private City city;
+
+    @Column(name = "move_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date moveTime;
 
     public long getId() {
         return id;
@@ -24,35 +36,35 @@ public class GameStatistic {
         this.id = id;
     }
 
-    public int getMove_number() {
-        return move_number;
+    public int getMoveNumber() {
+        return moveNumber;
     }
 
-    public void setMove_number(int move_number) {
-        this.move_number = move_number;
+    public void setMoveNumber(int moveNumber) {
+        this.moveNumber = moveNumber;
     }
 
-    public int getGame_id() {
-        return game_id;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGame_id(int game_id) {
-        this.game_id = game_id;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
-    public int getCity_id() {
-        return city_id;
+    public City getCity() {
+        return city;
     }
 
-    public void setCity_id(int city_id) {
-        this.city_id = city_id;
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    public Timestamp getMove_time() {
-        return move_time;
+    public Date getMoveTime() {
+        return moveTime;
     }
 
-    public void setMove_time(Timestamp move_time) {
-        this.move_time = move_time;
+    public void setMoveTime(Date moveTime) {
+        this.moveTime = moveTime;
     }
 }
