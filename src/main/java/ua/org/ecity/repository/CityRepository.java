@@ -9,6 +9,7 @@ public interface CityRepository extends CrudRepository<City, Integer> {
 
     List<City> findByUrl (String name);
     List<City> findByName (String name);
+    List<City> getByFirstChar(Character firstChar);
     City getByName (String name);
     City getById (int id);
 

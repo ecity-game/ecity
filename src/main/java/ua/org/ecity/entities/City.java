@@ -72,4 +72,21 @@ public class City {
     public void setEstablishment(Date establishment) {
         this.establishment = establishment;
     }
+
+    public Character getLastChar() {
+        return name.toUpperCase().charAt(name.length() - 1);
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", population=" + population +
+                ", establishment=" + establishment +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }
