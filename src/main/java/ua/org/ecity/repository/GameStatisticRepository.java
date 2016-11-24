@@ -3,6 +3,7 @@ package ua.org.ecity.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.GameStatistic;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface GameStatisticRepository extends CrudRepository<GameStatistic,Lo
 
     @Query("FROM GameStatistic gs WHERE gs.game.id = (:gameId)")
     List<GameStatistic> getLastMoveNumber(@Param("gameId") int gameId);
+
+    List<GameStatistic> getGameStatisticByGame(Game game);
 
     GameStatistic save(GameStatistic gameStatistic);
 }

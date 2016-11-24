@@ -2,7 +2,6 @@ package ua.org.ecity.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.repository.CityRepository;
 
@@ -41,6 +40,10 @@ public class CityService {
 
     public void deleteCity(Integer id) {
         cityRepository.delete(id);
+    }
+
+    public List<City> getCitiesByFirstLetter(Character firstLetter) {
+        return cityRepository.getByFirstLetter(firstLetter);
     }
 
     // public void addCity(City city) {

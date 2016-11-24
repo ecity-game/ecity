@@ -75,30 +75,14 @@ public class GameController {
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
-        MoveResult moveResult = new MoveResult();
 
         Game game = gameService.getGame(gameId);
-        if (game == null) {
-            moveResult.setSuccess(false);
-            moveResult.setError("no such game");
-            return moveResult;
+
+        if (game == null || game.isFinished()) {
+            return new MoveResult(GameStatus.DOESNT_EXIST, null);
         }
 
-        City cityClient = cityService.getCity(cityName);
-        if (cityClient == null) {
-            moveResult.setSuccess(false);
-            moveResult.setError("no such city in the game database");
-            return moveResult;
-        }
-
-        gameStatisticService.addGameStatistic(game, cityClient);
-
-        moveResult.setSuccess(true);
-        City generatedCity = cityService.getCity("Киев");
-        moveResult.setGeneratedCity(generatedCity.getName());
-        moveResult.setPositionX(generatedCity.getLatitude());
-        moveResult.setPositionY(generatedCity.getLongitude());
-        return moveResult;
+        return gameStatisticService.step(game, cityService.getCity(cityName));
     }
 
 }

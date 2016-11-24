@@ -45,6 +45,10 @@ public class Game {
         return finished;
     }
 
+    public boolean getFinished() {
+        return finished;
+    }
+
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
