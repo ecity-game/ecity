@@ -1,9 +1,13 @@
 package ua.org.ecity.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum GameStatus {
 
     EXISTS(0, "Game exists"),
     DOESNT_EXIST(1, "Game doesn't exist"),
+//    GAMEFINISHED(2, "Game is finished"),
     NOCITY(10, "There isn't city in the base"),
     CITYUSE (11,"The City was use in game"),
     WRONGCITYLETTER(12,"The City start on wrong letter"),
@@ -26,5 +30,13 @@ public enum GameStatus {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "GameStatus{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

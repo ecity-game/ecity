@@ -42,8 +42,8 @@ public class CityService {
         cityRepository.delete(id);
     }
 
-    public List<City> getCityesByFirstChar(Character firstChar) {
-        return cityRepository.getByFirstChar(firstChar);
+    public List<City> getCitiesByFirstLetter(Character firstLetter) {
+        return cityRepository.getByFirstLetter(firstLetter);
     }
 
     // public void addCity(City city) {

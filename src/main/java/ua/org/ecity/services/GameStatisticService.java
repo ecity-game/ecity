@@ -61,17 +61,25 @@ public class GameStatisticService {
         }
 
         this.addGameStatistic(game, cityClient);
-        City cityServer = this.getServerMove(cityClient);
+        usedCities.add(cityClient);
+
+        City cityServer = this.getServerMove(cityClient, usedCities);
 
         if (cityServer == null) {
             return new MoveResult(GameStatus.WINNERPLAYER1, null);
         }
 
+        this.addGameStatistic(game, cityServer);
         return new MoveResult(GameStatus.EXISTS, cityServer);
     }
 
-    private City getServerMove(City curentCity) {
-        List<City> cities = cityService.getCityesByFirstChar(curentCity.getLastChar());
-        return cities.get(0);
+    private City getServerMove(City currentCity, List<City> usedCities) {
+        List<City> cities = cityService.getCitiesByFirstLetter(currentCity.getLastChar());
+        for (City city : cities) {
+            if (!usedCities.contains(city)) {
+                return city;
+            }
+        }
+        return null;
     }
 }
