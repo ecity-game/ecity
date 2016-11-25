@@ -24,6 +24,10 @@ public class GameStatisticService {
     private int getLastMoveNumber(Game game) {
         List<GameStatistic> gameStatistic = gameStatisticRepository.getGameStatisticByGame(game);
 
+        if (gameStatistic.isEmpty()) {
+            return 0;
+        }
+
         return gameStatistic.stream()
                 .map(elem -> elem.getMoveNumber())
                 .max(Integer::compare)
