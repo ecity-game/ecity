@@ -11,11 +11,20 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    private int regionId;
     private int longitude;
     private int latitude;
     private int population;
     private Date establishment;
     private String url;
+
+    public int getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
 
     public int getId() {
         return id;
