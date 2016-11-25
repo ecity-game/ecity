@@ -5,12 +5,14 @@
 <body>
 
 
-<form action="http://ecity.org.ua:8080/admin/city/add" method="post">
+<form action="/admin/city/add" method="post">
     <input type="submit" value="ADD CITY">
     </button type="submit">
     <br><br>
     City name:<br>
     <input type="text" name="name"><br>
+    RegionId:<br>
+    <input type="text" name="regionId"><br>
     longitude:<br>
     <input type="text" name="longitude"><br>
     latitude:<br>
@@ -23,7 +25,7 @@
     <input type="text" name="url"><br>
 </form>
 
-<form action="http://ecity.org.ua:8080/admin/city/edit" method="post">
+<form action="/admin/city/edit" method="post">
     <br><br>
     <input type="submit" value="EDIT CITY">
     </button type="submit">
@@ -32,6 +34,8 @@
     <input type="text" name="id"><br>
     City name:<br>
     <input type="text" name="name"><br>
+    RegionId:<br>
+    <input type="text" name="regionId"><br>
     longitude:<br>
     <input type="text" name="longitude"><br>
     latitude:<br>
@@ -42,6 +46,14 @@
     <input type="text" name="establishment"><br>
     url:<br>
     <input type="text" name="url"><br>
+</form>
+
+<form action="/admin/region/add" method="post">
+    <input type="submit" value="ADD REGION">
+    </button type="submit">
+    <br><br>
+    Region name:<br>
+    <input type="text" name="name"><br>
 </form>
 
 </body>
