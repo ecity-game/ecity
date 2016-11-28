@@ -75,14 +75,7 @@ public class GameController {
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
-
-        Game game = gameService.getGame(gameId);
-
-        if (game == null || game.isFinished()) {
-            return new MoveResult(GameStatus.DOESNT_EXIST, null);
-        }
-
-        return gameStatisticService.step(game, cityService.getCity(cityName));
+        return gameStatisticService.step(gameService.getGame(gameId), cityService.getCity(cityName));
     }
 
 }
