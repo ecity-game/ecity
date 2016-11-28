@@ -1,6 +1,12 @@
 package ua.org.ecity.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
@@ -11,12 +17,21 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    private int regionId;
     private int longitude;
     private int latitude;
     private int population;
     @Temporal(TemporalType.TIMESTAMP)
     private Date establishment;
     private String url;
+
+    public int getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
 
     public int getId() {
         return id;
@@ -77,6 +92,11 @@ public class City {
     public Character getLastChar() {
         return name.toUpperCase().charAt(name.length() - 1);
     }
+
+
+//    public Character getFirstChar() {
+//        return name.toUpperCase().charAt(0);
+//    }
 
     @Override
     public String toString() {
