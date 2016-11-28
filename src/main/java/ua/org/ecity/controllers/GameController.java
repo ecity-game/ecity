@@ -39,22 +39,24 @@ public class GameController {
 
 
     @RequestMapping("/game/status")
-    public String gameStatus(@AuthenticationPrincipal final UserDetails user) {
+    public GameInfo gameStatus(@AuthenticationPrincipal final UserDetails user) {
         String userName = user.getUsername();
         System.out.println("userName = " + userName);
         int userId = userService.getUser(userName).getId();
         Game gameTemp = gameService.findGameForStatus(userId);
-        GameInfo gameInfo = new GameInfo();
+//        GameInfo gameInfo = new GameInfo();
         if (gameTemp == null) {
-            gameInfo.setId(null);
-            gameInfo.setErrorCode(GameStatus.DOESNT_EXIST.getCode());
-            gameInfo.setErrorMessage(GameStatus.DOESNT_EXIST.getMessage());
-            return gameInfo.toString();
+//            gameInfo.setId(null);
+//            gameInfo.setErrorCode(GameStatus.DOESNT_EXIST.getCode());
+//            gameInfo.setErrorMessage(GameStatus.DOESNT_EXIST.getMessage());
+//            return gameInfo.toString();
+            return new GameInfo(null, GameStatus.DOESNT_EXIST);
         } else {
-            gameInfo.setId(gameTemp.getId());
-            gameInfo.setErrorCode(GameStatus.EXISTS.getCode());
-            gameInfo.setErrorMessage(GameStatus.EXISTS.getMessage());
-            return gameInfo.toString();
+//            gameInfo.setId(gameTemp.getId());
+//            gameInfo.setErrorCode(GameStatus.EXISTS.getCode());
+//            gameInfo.setErrorMessage(GameStatus.EXISTS.getMessage());
+//            return gameInfo.toString();
+            return new GameInfo(gameTemp.getId(), GameStatus.EXISTS);
         }
     }
 

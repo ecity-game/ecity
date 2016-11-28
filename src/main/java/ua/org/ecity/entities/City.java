@@ -14,6 +14,7 @@ public class City {
     private int longitude;
     private int latitude;
     private int population;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date establishment;
     private String url;
 
