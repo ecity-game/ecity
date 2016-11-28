@@ -1,6 +1,10 @@
 package ua.org.ecity.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
@@ -85,6 +89,11 @@ public class City {
     public Character getLastChar() {
         return name.toUpperCase().charAt(name.length() - 1);
     }
+
+
+//    public Character getFirstChar() {
+//        return name.toUpperCase().charAt(0);
+//    }
 
     @Override
     public String toString() {
