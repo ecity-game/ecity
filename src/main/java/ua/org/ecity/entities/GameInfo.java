@@ -29,6 +29,12 @@ public class GameInfo {
         this.gameStatus = gameStatus;
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", gameStatus=" + gameStatus +
+                '}';
+    }
 }
 
