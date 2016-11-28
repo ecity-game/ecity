@@ -39,23 +39,16 @@ public class GameController {
 
 
     @RequestMapping("/game/status")
-    public String gameStatus(@AuthenticationPrincipal final UserDetails user) {
+    public GameInfo gameStatus(@AuthenticationPrincipal final UserDetails user) {
         String userName = user.getUsername();
+        System.out.println("userName = " + userName);
         int userId = userService.getUser(userName).getId();
         Game gameTemp = gameService.findGameForStatus(userId);
-        GameInfo gameInfo = new GameInfo();
-
         if (gameTemp == null) {
-            gameInfo.setId(null);
-            gameInfo.setErrorCode(GameStatus.DOESNT_EXIST.getCode());
-            gameInfo.setErrorMessage(GameStatus.DOESNT_EXIST.getMessage());
-            return gameInfo.toString();
+            return new GameInfo(null, GameStatus.DOESNT_EXIST);
+        } else {
+            return new GameInfo(gameTemp.getId(), GameStatus.EXISTS);
         }
-
-        gameInfo.setId(gameTemp.getId());
-        gameInfo.setErrorCode(GameStatus.EXISTS.getCode());
-        gameInfo.setErrorMessage(GameStatus.EXISTS.getMessage());
-        return gameInfo.toString();
     }
 
     @RequestMapping("/game/new")
@@ -75,7 +68,14 @@ public class GameController {
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
-        return gameStatisticService.step(gameService.getGame(gameId), cityService.getCity(cityName));
+
+        Game game = gameService.getGame(gameId);
+
+        if (game == null || game.isFinished()) {
+            return new MoveResult(GameStatus.DOESNT_EXIST, null);
+        }
+
+        return gameStatisticService.step(game, cityService.getCity(cityName));
     }
 
 }

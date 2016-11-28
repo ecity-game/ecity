@@ -1,40 +1,34 @@
 package ua.org.ecity.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+//@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public class GameInfo {
-    private Integer Id;
-    private String errorMessage;
-    private Integer errorCode;
+    private Integer id;
+    //private Game game;
+    private GameStatus gameStatus;
 
-    public int getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public GameInfo(Integer id, GameStatus gameStatus) {
+        this.id = id;
+        this.gameStatus = gameStatus;
     }
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
-    @Override
-    public String toString() {
-        return "{Id=" + Id +
-                ", errorMessage='" + errorMessage + '\'' +
-                ", errorCode=" + errorCode +
-                '}';
-    }
+
 }
 
