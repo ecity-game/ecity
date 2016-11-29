@@ -6,6 +6,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import ua.org.ecity.entities.User;
+import ua.org.ecity.repository.CityRepository;
+import ua.org.ecity.repository.UserRepository;
+
+import javax.activation.DataSource;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -15,19 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index", "/hello", "/city", "/cities", "/", "/index.html").permitAll()
-                .antMatchers("/login", "/user/**", "/game/**").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .antMatchers("/login", "/user/**", "/game/**").hasAuthority("USER")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
                 .httpBasic()
                 .and()
                 .csrf().disable();
 
-                /*
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .failureUrl("/login-error").permitAll();
-                */
     }
 
     @Override
@@ -45,20 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authManager
-            , AuthenticationManagerBuilder authAdmin
-    ) throws Exception {
-        authManager
-                .inMemoryAuthentication()
-                .withUser("user")
-                .password("password")
-                .roles("USER");
-
-        authAdmin
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password("admin")
-                .roles("ADMIN");
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().usersByUsernameQuery(
+                "select username,password, enabled from users where username=?")
+                .authoritiesByUsernameQuery(
+                        "select u.username, r.name as authority from user_roles ur join roles r on ur.role_id = r.id join users u on u.id = ur.user_id where u.username=?");
 
     }
 }
