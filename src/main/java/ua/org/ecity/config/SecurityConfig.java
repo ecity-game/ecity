@@ -1,33 +1,35 @@
 package ua.org.ecity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DataSource dataSource;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index", "/hello", "/city", "/cities", "/", "/index.html").permitAll()
-                .antMatchers("/login", "/user/**", "/game/**").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .antMatchers("/login", "/user/**", "/game/**").hasAuthority("USER")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
                 .httpBasic()
                 .and()
                 .csrf().disable();
 
-                /*
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .failureUrl("/login-error").permitAll();
-                */
     }
 
     @Override
@@ -45,20 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authManager
-            , AuthenticationManagerBuilder authAdmin
-    ) throws Exception {
-        authManager
-                .inMemoryAuthentication()
-                .withUser("user")
-                .password("password")
-                .roles("USER");
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder())
+                .usersByUsernameQuery(
+                "select u.login as username, u.password, u.enable as enabled from users u where u.login=?")
+                .authoritiesByUsernameQuery(
+                        "select u.name as username, r.name as role from user_roles ur join roles r on ur.role_id = r.id join users u on ur.user_id = u.id where u.login=?");
 
-        authAdmin
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password("admin")
-                .roles("ADMIN");
+    }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder;
     }
 }
