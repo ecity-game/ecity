@@ -50,23 +50,23 @@ public class GameStatisticService {
     public MoveResult step(Game game, City cityClient) {
 
         if (game == null || game.isFinished()) {
-            return new MoveResult(GameStatus.DOESNT_EXIST, null);
+            return new MoveResult(GameStatus.DOESNT_EXIST, null,null);
         }
 
         if (cityClient == null) {
-            return new MoveResult(GameStatus.NOCITY, null);
+            return new MoveResult(GameStatus.NOCITY, null,null);
         }
 
         List<City> usedCities = this.getGameStatisticsByGame(game).stream().map(GameStatistic::getCity).collect(Collectors.toList());
 
         if (usedCities.size() != 0) {
             if (cityClient.getName().charAt(0) != usedCities.get(usedCities.size() - 1).getLastChar()) {
-                return new MoveResult(GameStatus.WRONGCITYLETTER, null);
+                return new MoveResult(GameStatus.WRONGCITYLETTER, null,null);
             }
         }
 
         if (usedCities.contains(cityClient)) {
-            return new MoveResult(GameStatus.CITYUSE, null);
+            return new MoveResult(GameStatus.CITYUSE, null,null);
         }
 
         this.addGameStatistic(game, cityClient);
@@ -75,11 +75,11 @@ public class GameStatisticService {
         City cityServer = this.getServerMove(cityClient, usedCities);
 
         if (cityServer == null) {
-            return new MoveResult(GameStatus.WINNERPLAYER1, null);
+            return new MoveResult(GameStatus.WINNERPLAYER1, null,null);
         }
 
         this.addGameStatistic(game, cityServer);
-        return new MoveResult(GameStatus.EXISTS, cityServer);
+        return new MoveResult(GameStatus.EXISTS, cityServer, cityClient);
     }
 
     private City getServerMove(City currentCity, List<City> usedCities) {

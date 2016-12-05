@@ -14,6 +14,46 @@ public class User {
     private String login;
     private String password;
     private boolean enable;
+    private String email;
+    private String lastname;
+    private String citylives;
+
+    public User() {
+    }
+
+    public User(String username, String login, String password, boolean enable, String email, String lastname, String citylives) {
+        this.username = username;
+        this.login = login;
+        this.password = password;
+        this.enable = enable;
+        this.email = email;
+        this.lastname = lastname;
+        this.citylives = citylives;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getCitylives() {
+        return citylives;
+    }
+
+    public void setCitylives(String citylives) {
+        this.citylives = citylives;
+    }
 
     public int getId() {
         return id;

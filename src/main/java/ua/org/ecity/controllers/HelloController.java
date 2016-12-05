@@ -1,10 +1,19 @@
 package ua.org.ecity.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ua.org.ecity.entities.City;
+import ua.org.ecity.entities.Game;
+import ua.org.ecity.entities.GameInfo;
+import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.Name;
+import ua.org.ecity.entities.User;
+import ua.org.ecity.entities.UserRoles;
+import ua.org.ecity.repository.UserRepository;
 import ua.org.ecity.services.CityService;
+import ua.org.ecity.services.UserRolesService;
+import ua.org.ecity.services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +24,55 @@ public class HelloController {
     @Autowired
     CityService cityService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    UserRolesService userRolesService;
+
     /*
     @RequestMapping("/")
     public String index() {
         return "Greetings from Spring Boot";
     }
     */
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public GameStatus userRegister(@RequestParam("login") String login, @RequestParam("password") String password,
+                                   @RequestParam("email") String email, @RequestParam("firstName") String name,
+                                   @RequestParam("lastName") String lastame,
+                                   @RequestParam("cityLive") String cityLive) {
+
+        if (userService.getUser(login) != null) {
+            return GameStatus.USEREXIST;
+        }
+
+        if ((login.isEmpty())) {
+            return GameStatus.USERDOESNTENTERLOGIN;
+        }
+        if (!(password.isEmpty())) {
+            User user = new User();
+            user.setLogin(login);
+            user.setPassword(new BCryptPasswordEncoder().encode(password));
+            user.setEmail(email);
+            user.setUsername(name);
+            user.setLastname(lastame);
+            user.setCitylives(cityLive);
+            user.setEnable(true);
+            userRepository.save(user);
+
+            userRolesService.saveUserRole(new UserRoles(user.getId(), 1));
+            return GameStatus.USERREGISTEROK;
+        }
+
+
+        return GameStatus.USERPASSWORDINCORECT;
+
+    }
+
 
     @RequestMapping("/city")
     public

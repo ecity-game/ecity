@@ -37,11 +37,10 @@ public class GameController {
         return new Result(true);
     }
 
-
     @RequestMapping("/game/status")
     public GameInfo gameStatus(@AuthenticationPrincipal final UserDetails user) {
         String userName = user.getUsername();
-        System.out.println("userName = " + userName);
+        //System.out.println("userName = " + userName);
         int userId = userService.getUser(userName).getId();
         Game gameTemp = gameService.findGameForStatus(userId);
         if (gameTemp == null) {
@@ -72,7 +71,7 @@ public class GameController {
         Game game = gameService.getGame(gameId);
 
         if (game == null || game.isFinished()) {
-            return new MoveResult(GameStatus.DOESNT_EXIST, null);
+            return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
 
         return gameStatisticService.step(game, cityService.getCity(cityName));
