@@ -26,7 +26,7 @@ public class CityService {
     }
 
     public City getCity(String name) {
-        return cityRepository.getByName(name);
+        return cityRepository.getByName(name).get(0);
     }
 
     public City getCityByID(int id) {
