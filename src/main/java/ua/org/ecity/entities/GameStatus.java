@@ -18,8 +18,6 @@ public enum GameStatus {
     USERPASSWORDINCORECT(33,"User doesn't enter password"),
     USERDOESNTENTERLOGIN(34,"User doesn't enter login");
 
-
-
     GameStatus(int code, String message) {
         this.code = code;
         this.message = message;

@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface RegionRepository extends CrudRepository<Region, Integer> {
 
+    @Override
     List<Region> findAll();
 
     Region getById (int id);
+
+    List<Region> findByName (String name);
 
     @Override
     Region save(Region region);

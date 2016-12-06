@@ -3,6 +3,7 @@ package ua.org.ecity.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.GameInfo;
@@ -83,6 +84,12 @@ public class HelloController {
 
     @RequestMapping("/city/{id}")
     public City cityInfo(@PathVariable("id") int id) {
+
+        if (cityService.getCityByID(id) == null) {
+            City city = new City();
+            city.setName("Wrong id");
+            return city;
+        }
         return cityService.getCityByID(id);
     }
 
@@ -119,4 +126,5 @@ public class HelloController {
     public String another() {
         return "Another one";
     }
+
 }
