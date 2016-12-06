@@ -29,4 +29,13 @@ public class RegionService {
     public Region getRegionByID(int id) {
         return regionRepository.getById(id);
     }
+
+    public List<Region> getRegionByName(String name) {
+        return regionRepository.findByName(name);
+    }
+
+    public Region getRegion(String name) {
+        return regionRepository.findByName(name).get(0);
+    }
+
 }
