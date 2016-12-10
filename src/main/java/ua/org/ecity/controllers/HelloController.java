@@ -46,31 +46,37 @@ public class HelloController {
                                    @RequestParam("email") String email, @RequestParam("firstName") String name,
                                    @RequestParam("lastName") String lastame,
                                    @RequestParam("cityLive") String cityLive) {
+        return userService.enterNewUserInDB(login, password, email, name, lastame, cityLive);
 
-        if (userService.getUser(login) != null) {
-            return GameStatus.USEREXIST;
-        }
-
-        if ((login.isEmpty())) {
-            return GameStatus.USERDOESNTENTERLOGIN;
-        }
-        if (!(password.isEmpty())) {
-            User user = new User();
-            user.setLogin(login);
-            user.setPassword(new BCryptPasswordEncoder().encode(password));
-            user.setEmail(email);
-            user.setUsername(name);
-            user.setLastname(lastame);
-            user.setCitylives(cityLive);
-            user.setEnable(true);
-            userRepository.save(user);
-
-            userRolesService.saveUserRole(new UserRoles(user.getId(), 1));
-            return GameStatus.USERREGISTEROK;
-        }
-
-
-        return GameStatus.USERPASSWORDINCORECT;
+//        if (userService.getUser(login) != null) {
+//            return GameStatus.USER_EXIST;
+//        }
+//
+//        if ((login.isEmpty())) {
+//            return GameStatus.USER_DOESNT_ENTER_LOGIN;
+//        }
+//
+//        if (!userService.isEmailValid(email)) {
+//            return GameStatus.USER_ENTER_INCORRECT_EMAIL;
+//        }
+//
+//        if (!(password.isEmpty())) {
+//            User user = new User();
+//            user.setLogin(login);
+//            user.setPassword(new BCryptPasswordEncoder().encode(password));
+//            user.setEmail(email);
+//            user.setUsername(name);
+//            user.setLastname(lastame);
+//            user.setCitylives(cityLive);
+//            user.setEnable(true);
+//            userRepository.save(user);
+//
+//            userRolesService.saveUserRole(new UserRoles(user.getId(), 1));
+//            return GameStatus.USER_REGISTER_OK;
+//        }
+//
+//
+//        return GameStatus.USER_PASSWORD_INCORECT;
 
     }
 
