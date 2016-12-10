@@ -17,6 +17,9 @@ public class GameStatisticService {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private GameService gameService;
+
     public List<GameStatistic> getGameStatisticsByGame(Game game) {
         return gameStatisticRepository.getGameStatisticByGame(game);
     }
@@ -75,7 +78,8 @@ public class GameStatisticService {
         City cityServer = this.getServerMove(cityClient, usedCities);
 
         if (cityServer == null) {
-            return new MoveResult(GameStatus.WINNERPLAYER1, null,null);
+            gameService.findStartedGame(game.getId());
+            return new MoveResult(GameStatus.WINNERPLAYER1, null,cityClient);
         }
 
         this.addGameStatistic(game, cityServer);
