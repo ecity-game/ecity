@@ -8,6 +8,9 @@ import ua.org.ecity.entities.User;
 import ua.org.ecity.entities.UserRoles;
 import ua.org.ecity.repository.UserRepository;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class UserService {
 
@@ -22,13 +25,10 @@ public class UserService {
     }
 
     public boolean isEmailValid(String email) {
-        email = email.replace("@", "#");
-        email = email.replace(".", "#");
-        String[] tmp = email.split("#");
-        if ((tmp[0].length() > 0) && (tmp[1].length() > 0) && (tmp[2].length() > 1)) {
-            return true;
-        }
-        return false;
+        Pattern pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
+        Matcher matcher = pattern.matcher(email);
+        boolean matches = matcher.matches();
+        return matches;
 
     }
 

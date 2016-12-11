@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.*;
+import ua.org.ecity.repository.GameRepository;
 import ua.org.ecity.repository.GameStatisticRepository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class GameStatisticService {
     private CityService cityService;
 
     @Autowired
-    private GameService gameService;
+    private GameRepository gameRepository;
 
     public List<GameStatistic> getGameStatisticsByGame(Game game) {
         return gameStatisticRepository.getGameStatisticByGame(game);
@@ -78,7 +79,8 @@ public class GameStatisticService {
         City cityServer = this.getServerMove(cityClient, usedCities);
 
         if (cityServer == null) {
-            gameService.findStartedGame(game.getId());
+           game.setFinished(true);
+           gameRepository.save(game);
             return new MoveResult(GameStatus.WINNERPLAYER1, null,cityClient);
         }
 
