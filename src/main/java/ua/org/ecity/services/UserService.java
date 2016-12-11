@@ -42,6 +42,10 @@ public class UserService {
             return GameStatus.USER_DOESNT_ENTER_LOGIN;
         }
 
+        if (login.length() > 20) {
+            return GameStatus.USER_LOGIN_MUST_BE_LESS_20;
+        }
+
         if (!isEmailValid(email)) {
             return GameStatus.USER_ENTER_INCORRECT_EMAIL;
         }

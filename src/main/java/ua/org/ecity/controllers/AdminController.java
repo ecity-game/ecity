@@ -81,7 +81,7 @@ public class AdminController {
                                     @RequestParam Date establishment, @RequestParam String url) {
 
         if (cityService.getCitiesByName(name).size() > 0)
-            return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).getId());
+            return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).get(0).getId());
 
         City city = new City();
 
@@ -95,7 +95,7 @@ public class AdminController {
 
         cityService.saveCity(city);
 
-        return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_ADDED, cityService.getCity(name).getId());
+        return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_ADDED, cityService.getCity(name).get(0).getId());
     }
 
     @RequestMapping("/admin/regions")
