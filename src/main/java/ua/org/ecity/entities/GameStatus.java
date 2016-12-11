@@ -14,10 +14,11 @@ public enum GameStatus {
     WINNERPLAYER1(20, " Winner Player 1"),
     WINNERPLAYER2(21, " Winner Player 2"),
     USER_REGISTER_OK (31,"User registration OK "),
-    USER_EXIST(32,"The player exist "),
+    USER_EXIST(32,"The player exist"),
     USER_PASSWORD_INCORECT(33,"User doesn't enter password"),
     USER_DOESNT_ENTER_LOGIN(34,"User doesn't enter login"),
-    USER_ENTER_INCORRECT_EMAIL(35,"User enter incorrect e-mail");
+    USER_ENTER_INCORRECT_EMAIL(35,"User enter incorrect e-mail"),
+    USER_LOGIN_MUST_BE_LESS_20(36,"User Login must be less than 20 character");
 
     GameStatus(int code, String message) {
         this.code = code;

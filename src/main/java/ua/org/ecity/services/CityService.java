@@ -25,8 +25,8 @@ public class CityService {
         return cityRepository.findAll();
     }
 
-    public City getCity(String name) {
-        return cityRepository.getByName(name).get(0);
+    public List<City> getCity(String name) {
+        return cityRepository.getByName(name);
     }
 
     public City getCityByID(int id) {
