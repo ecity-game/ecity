@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.GameStatus;
+import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.Region;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.RegionService;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class AdminController {
@@ -29,8 +33,9 @@ public class AdminController {
     @RequestMapping("/admin/cities")
     public
     @ResponseBody
-    List<City> cities() {
-        return cityService.getCities();
+    List<CityWithStringData> cities() {
+
+        return cityService.formatAllCities(cityService.getCities());
     }
 
     @RequestMapping("/admin/city/delete/{id}")
@@ -48,7 +53,7 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult editCity(@RequestParam int id, @RequestParam String name, @RequestParam int regionId,
                                      @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
-                                     @RequestParam Date establishment, @RequestParam String url) {
+                                     @RequestParam String establishment, @RequestParam String url) throws ParseException {
 
         if (cityService.getCityByID(id) == null)
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
@@ -60,13 +65,17 @@ public class AdminController {
                 return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, id);
         }
 
+        String string = establishment;
+        DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+        Date establishmentForDataBase = format.parse(string);
+
         City city = cityService.getCityByID(id);
         city.setName(name);
         city.setRegionId(regionId);
         city.setLongitude(longitude);
         city.setLatitude(latitude);
         city.setPopulation(population);
-        city.setEstablishment(establishment);
+        city.setEstablishment(establishmentForDataBase);
         city.setUrl(url);
 
         cityService.saveCity(city);
@@ -78,10 +87,14 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult addCity(@RequestParam String name, @RequestParam int regionId,
                                     @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
-                                    @RequestParam Date establishment, @RequestParam String url) {
+                                    @RequestParam String  establishment, @RequestParam String url) throws ParseException {
 
         if (cityService.getCitiesByName(name).size() > 0)
             return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).get(0).getId());
+
+        String string = establishment;
+        DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+        Date establishmentForDataBase = format.parse(string);
 
         City city = new City();
 
@@ -90,7 +103,7 @@ public class AdminController {
         city.setLongitude(longitude);
         city.setLatitude(latitude);
         city.setPopulation(population);
-        city.setEstablishment(establishment);
+        city.setEstablishment(establishmentForDataBase);
         city.setUrl(url);
 
         cityService.saveCity(city);
@@ -150,4 +163,5 @@ public class AdminController {
 
         return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_CHANGED, id);
     }
+
 }
