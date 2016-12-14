@@ -53,7 +53,7 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult editCity(@RequestParam int id, @RequestParam String name, @RequestParam int regionId,
                                      @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
-                                     @RequestParam String establishment, @RequestParam String url) throws ParseException {
+                                     @RequestParam String establishment, @RequestParam String url) {
 
         if (cityService.getCityByID(id) == null)
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
@@ -67,7 +67,12 @@ public class AdminController {
 
         String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = format.parse(string);
+        Date establishmentForDataBase = null;
+        try {
+            establishmentForDataBase = format.parse(string);
+        } catch (ParseException e) {
+            return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, id);
+        }
 
         City city = cityService.getCityByID(id);
         city.setName(name);
@@ -87,14 +92,19 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult addCity(@RequestParam String name, @RequestParam int regionId,
                                     @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
-                                    @RequestParam String  establishment, @RequestParam String url) throws ParseException {
+                                    @RequestParam String  establishment, @RequestParam String url){
 
         if (cityService.getCitiesByName(name).size() > 0)
             return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).get(0).getId());
 
         String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = format.parse(string);
+        Date establishmentForDataBase = null;
+        try {
+            establishmentForDataBase = format.parse(string);
+        } catch (ParseException e) {
+            return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, 0);
+        }
 
         City city = new City();
 

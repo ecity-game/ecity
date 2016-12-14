@@ -10,6 +10,7 @@ public enum AdminPanelStatus {
     CITY_HAS_BEEN_DELETED(102, "City has been deleted"),
     CITY_IS_IN_DATABASE(103, " City is already in database"),
     CITY_NOT_FOUND(104, "City not found"),
+    WRONG_ESTABLISHMENT_VALUE(105, "Wrong establishment data value"),
     REGION_HAS_BEEN_ADDED(110, "Region has been added"),
     REGION_HAS_BEEN_CHANGED(111, "Region has been changed"),
     REGION_HAS_BEEN_DELETED(112, "Region has been deleted"),
