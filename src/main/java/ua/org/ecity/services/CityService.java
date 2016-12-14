@@ -3,8 +3,10 @@ package ua.org.ecity.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.org.ecity.entities.City;
+import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.repository.CityRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +46,28 @@ public class CityService {
 
     public List<City> getCitiesByFirstLetter(Character firstLetter) {
         return cityRepository.getByFirstLetter(firstLetter);
+    }
+
+    public CityWithStringData formatCity(int id) {
+        CityWithStringData cityWithStringData = new CityWithStringData();
+
+        City city = getCityByID(id);
+        cityWithStringData.setId(city.getId());
+        cityWithStringData.setName(city.getName());
+        cityWithStringData.setPopulation(city.getPopulation());
+        cityWithStringData.setLongitude(city.getLongitude());
+        cityWithStringData.setLatitude(city.getLatitude());
+        cityWithStringData.setEstablishment(String.format("%tY", city.getEstablishment()));
+        cityWithStringData.setUrl(city.getUrl());
+
+        return cityWithStringData;
+    }
+
+    public List<CityWithStringData> formatAllCities(List<City> cities) {
+        List<CityWithStringData> cityWithStringDataList = new ArrayList<>();
+        for (City city : cities)
+            cityWithStringDataList.add(formatCity(city.getId()));
+        return cityWithStringDataList;
     }
 
 }

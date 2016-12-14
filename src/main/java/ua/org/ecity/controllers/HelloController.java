@@ -3,8 +3,10 @@ package ua.org.ecity.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
+import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.entities.GameInfo;
 import ua.org.ecity.entities.GameStatus;
@@ -89,21 +91,23 @@ public class HelloController {
     }
 
     @RequestMapping("/city/{id}")
-    public City cityInfo(@PathVariable("id") int id) {
-
-        if (cityService.getCityByID(id) == null) {
-            City city = new City();
-            city.setName("Wrong id");
-            return city;
+    public Object cityInfo(@PathVariable("id") int id) {
+        int index = cityService.getCities().size();
+        City tempCity = cityService.getCities().get(index - 1);
+        if (id > tempCity.getId()) {
+            return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
         }
-        return cityService.getCityByID(id);
+
+        City city = cityService.getCityByID(id);
+        return cityService.formatCity(city.getId());
     }
 
     @RequestMapping("/cities")
     public
     @ResponseBody
-    List<City> cities() {
-        return cityService.getCities();
+    List<CityWithStringData> cities() {
+
+        return cityService.formatAllCities(cityService.getCities());
     }
 
 
