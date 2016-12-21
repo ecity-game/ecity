@@ -1,5 +1,7 @@
 package ua.org.ecity.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ import java.util.List;
 
 @RestController
 public class HelloController {
+
+    final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
     CityService cityService;
@@ -89,6 +93,7 @@ public class HelloController {
     public
     @ResponseBody
     List<City> city(@RequestParam(value = "name") String name) {
+        logger.info("/city 'name': " + name);
         return cityService.getCitiesByName(name);
     }
 
