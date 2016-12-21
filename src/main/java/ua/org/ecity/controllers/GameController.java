@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ua.org.ecity.entities.*;
-import ua.org.ecity.repository.GameRepository;
+import ua.org.ecity.entities.Game;
+import ua.org.ecity.entities.GameInfo;
+import ua.org.ecity.entities.GameStatus;
+import ua.org.ecity.entities.MoveResult;
+import ua.org.ecity.entities.Result;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.GameService;
 import ua.org.ecity.services.GameStatisticService;
@@ -25,8 +28,6 @@ public class GameController {
     GameService gameService;
     @Autowired
     UserService userService;
-    @Autowired
-    GameRepository gameRepository;
     @Autowired
     GameStatisticService gameStatisticService;
 
@@ -67,14 +68,12 @@ public class GameController {
 
     @RequestMapping(value = "/game/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
+        return gameStatisticService.step(gameService.getGame(gameId), cityService.getCity(cityName));
+    }
 
-        Game game = gameService.getGame(gameId);
-
-        if (game == null || game.isFinished()) {
-            return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
-        }
-
-        return gameStatisticService.step(game, cityService.getCity(cityName));
+    @RequestMapping("/game/over/giveup")
+    public MoveResult giveup(@RequestParam("game_id") int gameId) {
+        return gameStatisticService.giveUp(gameService.getGame(gameId));
     }
 
 }
