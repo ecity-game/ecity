@@ -1,0 +1,35 @@
+.score {
+    position: relative;
+    width: 115px;
+    left: 43%;
+    padding-bottom: 40px;
+}
+.score p {
+    letter-spacing: 36px;
+    margin: 0px;
+    padding: 6px;
+    padding-left: 20px;
+    color: #6ac1b8;
+    font-family: Roboto, sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 58px;
+    text-align: center;
+}
+.counter {
+    position: absolute;
+    margin: 5px;
+    width: 46px;
+    height: 61px;
+    border: 1px solid #07588a;
+    border-radius: 5px 4px 4px 5px;
+    
+}
+.first-number {
+    left: 0;
+    top: 0;
+}
+.second-number {
+    right: 0;
+    top: 0;
+}
