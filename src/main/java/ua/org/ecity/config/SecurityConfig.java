@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/views/**/*.{html}")
                 .antMatchers("/app/**/*.{html}")
                 .antMatchers("/app/**/*.{js}")
+                .antMatchers("/manager/**")
+                .antMatchers("/connect/**")
                 .antMatchers("/resources/**");
     }
 
