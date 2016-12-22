@@ -1,0 +1,56 @@
+.register {
+    margin: 50px auto;
+    width: 270px;
+    text-align: center;
+    border-radius: 9px;
+    box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.35);
+    z-index: 1;
+}
+.register div {
+    padding: 5px 0;
+}
+
+.register .register_submit {
+    margin: 10px auto 35px auto;
+    width: 215px;
+    height: 40px;
+    background-color: #bfe9db;
+    border-radius: 5px;
+    border: none;
+    color: #07588a;
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 22px;
+}
+.register .register_submit:hover {
+    background-color:  #8cbcd1;
+    cursor: pointer;
+}
+
+.register .register_input_style {
+    padding: 5px auto;
+    width: 208px;
+    height: 40px;
+    background-color: white;
+    border-radius: 5px;
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    padding-left: 9px;
+    color: #07588a;
+}
+.register .register_input_style,
+.register_submit:focus {
+    outline: none;
+}
+
+.warning-message {
+    text-align: center;
+    font-family: Roboto, sans-serif;
+    color: red;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+

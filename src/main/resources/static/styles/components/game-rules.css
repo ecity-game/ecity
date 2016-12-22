@@ -1,0 +1,27 @@
+.game-rules {
+    width: 55%;
+    padding: 90px 50px;
+    float: left;
+}
+
+.game-rules h1{
+    text-align: center;
+    color: #07588a;
+    font-family: Roboto;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 22px;
+}
+
+.game-rules p{
+    color: #333;
+    font-size: 18px;
+    text-indent: 30px; 
+    font-family: Roboto;
+    font-weight: 700;
+    line-height: 22px;
+}
+.game-rules p::first-letter {
+    color: #246a96;
+    font-size: 30px;
+}

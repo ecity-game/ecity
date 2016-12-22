@@ -1,0 +1,57 @@
+.city-list {
+    width: 18%;
+    height: 845px;
+    float: left;
+    border: 2px solid #07588a;
+    overflow: scroll;
+    
+}
+.city-list h2 {
+    color: #07588a;
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 30px;
+    text-align: center;
+}
+
+.city-list ul li {
+    list-style: none;
+    margin-left: -35px;
+    margin-right: 5px;
+    text-align: left;
+    color: #07588a;
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    font-weight: 100;
+    line-height: 20px;
+}
+.city-list ul li p {
+    padding-left: 16px;
+    font-size: 18px;
+}
+.city-list ul li p:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+@keyframes information {
+    0%   { height:   0%; }
+    25%   { height:   25%; }
+    50%   { height:   50%; }
+    75%   { height:   75%; }
+  100% { height: 100%; }
+}
+
+.city-list ul li div {
+    border: 1px solid grey;
+    word-wrap: break-word;
+    animation-name: information;
+    animation-duration: 5s;
+    overflow: hidden;
+    color: #07588a;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 22px;
+}
