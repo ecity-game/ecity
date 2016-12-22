@@ -1,7 +1,6 @@
 package ua.org.ecity.controllers;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -18,10 +17,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
-/**
- * Created by User on 27.11.2016.
- */
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
@@ -47,26 +42,24 @@ public class GameControllerTest {
     public void gameStatustTest() {
         Game game = new Game();
         game.setId(3);
-        when (userDetails.getUsername()).thenReturn("John");
-        when (userService.getUser(anyString()).getId()).thenReturn(5);
+        when(userDetails.getUsername()).thenReturn("John");
+        when(userService.getUser(anyString()).getId()).thenReturn(5);
         when(gameService.findGameForStatus(5)).thenReturn(game);
 
         GameInfo result = gameController.gameStatus(userDetails);
         assertThat(result.toString(), is("{id=3, gameStatus={code=0, message='Game exists'}}"));
     }
 
-
     @Test
-    public void gameStatustNoGameExist() {
+    public void gameStatusNoGameExist() {
         Game game = new Game();
         game.setId(3);
-        when (userDetails.getUsername()).thenReturn("John");
-        when (userService.getUser(anyString()).getId()).thenReturn(5);
+        when(userDetails.getUsername()).thenReturn("John");
+        when(userService.getUser(anyString()).getId()).thenReturn(5);
         when(gameService.findGameForStatus(5)).thenReturn(null);
 
         GameInfo result = gameController.gameStatus(userDetails);
         assertThat(result.toString(), is("{id=null, gameStatus={code=1, message='Game doesn't exist'}}"));
     }
-
 
 }

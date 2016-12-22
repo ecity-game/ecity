@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+    <TITLE>
+        Basic Auth test
+    </TITLE>
+</HEAD>
+<BODY>
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://ecity.org.ua:8080/user/hello", true);
+    xhr.withCredentials = true;
+    xhr.setRequestHeader("Authorization", 'Basic ' + btoa('user:password'));
+    xhr.onload = function () {
+        console.log(xhr.responseText);
+    };
+    xhr.send();
+</script>
+</BODY>
+</HTML>
