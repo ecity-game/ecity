@@ -56,7 +56,7 @@ public class GameStatisticService {
         if (game == null || game.isFinished()) {
             return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
-        
+
         if (cityClients.size() == 0) {
             return new MoveResult(GameStatus.NOCITY, null, null);
         }
