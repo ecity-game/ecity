@@ -22,7 +22,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/index", "/hello", "/city", "/cities", "/", "/index.html").permitAll()
+                .antMatchers(
+                        "/css/**",
+                        "/index",
+                        "/hello",
+                        "/city",
+                        "/cities",
+                        "/",
+                        "/index.html",
+                        "/connect/**"
+                ).permitAll()
                 .antMatchers("/login", "/user/**", "/game/**").hasAuthority("USER")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
@@ -43,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/views/**/*.{html}")
                 .antMatchers("/app/**/*.{html}")
                 .antMatchers("/app/**/*.{js}")
-                .antMatchers("/manager/**")
-                .antMatchers("/connect/**")
+//                .antMatchers("/manager/**")
+//                .antMatchers("/connect/**")
                 .antMatchers("/resources/**");
     }
 
@@ -52,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery(
-                "select u.login as username, u.password, u.enable as enabled from users u where u.login=?")
+                        "select u.login as username, u.password, u.enable as enabled from users u where u.login=?")
                 .authoritiesByUsernameQuery(
                         "select u.login as username, r.name as role from user_roles ur join roles r on ur.role_id = r.id join users u on ur.user_id = u.id where u.login=?");
 

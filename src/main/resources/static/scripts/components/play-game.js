@@ -1,6 +1,6 @@
 'use strict';
 
-define(['react', 'superagent', './map-svg', '../settings', '../components/timer', '../components/timer-placeholder'], function (React, Superagent, MapSvg, Settings, Timer, TimerPlaceholder) {
+define(['react', 'superagent', '../components/map-svg', '../settings', '../components/timer', '../components/timer-placeholder'], function (React, Superagent, MapSvg, Settings, Timer, TimerPlaceholder) {
 
     return React.createClass({
 
@@ -47,8 +47,10 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
             });
         },
 
-        onButtonClick: function onButtonClick(event) {
+        onFormSubmit: function onFormSubmit(event) {
             var _this = this;
+
+            event.preventDefault();
 
             this.setState({
                 warningMessage: ''
@@ -109,11 +111,15 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
                         break;
                     case 20:
                         winnerMessage = 'Поздравляем! Вы победили! Сыграйте снова!';
+                        state.inputLetter = '';
                         state.disabled = true;
+                        state.showTimer = 0;
+                        state.city = '';
                         break;
                     case 21:
                         winnerMessage = 'Вы проиграли. Попробуйте еще раз.';
                         state.disabled = true;
+                        state.showTimer = 0;
                         break;
                     default:
                         winnerMessage = '';
@@ -123,6 +129,7 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
                 state.winnerMessage = winnerMessage;
                 state.warningMessage = warningMessage;
                 _this.setState(state);
+                console.log(_this.state.inputLetter);
             });
         },
 
@@ -145,8 +152,8 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
                 { className: 'play-game' },
                 this.state.showTimer > 0 ? React.createElement(Timer, { key: 'timer_' + this.state.showTimer, time: 60, onTimeout: this.onTimeout }) : React.createElement(TimerPlaceholder, null),
                 React.createElement(
-                    'div',
-                    { className: 'playField' },
+                    'form',
+                    { className: 'playField', onSubmit: this.onFormSubmit },
                     React.createElement(
                         'div',
                         null,
@@ -157,7 +164,7 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
                         null,
                         React.createElement(
                             'button',
-                            { className: 'send buttonStyle', onClick: this.onButtonClick },
+                            { type: 'submit', className: 'send buttonStyle' },
                             '\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C'
                         )
                     ),
@@ -166,7 +173,7 @@ define(['react', 'superagent', './map-svg', '../settings', '../components/timer'
                         null,
                         React.createElement(
                             'button',
-                            { className: 'giveUp buttonStyle bg-color text-color-yellow' },
+                            { type: 'button', className: 'giveUp buttonStyle bg-color text-color-yellow' },
                             '\u0421\u0434\u0430\u0442\u044C\u0441\u044F'
                         )
                     )

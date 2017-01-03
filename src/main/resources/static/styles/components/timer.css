@@ -1,7 +1,7 @@
 .score {
+    margin: 0 auto;
     position: relative;
     width: 115px;
-    left: 43%;
     padding-bottom: 40px;
 }
 .score p {

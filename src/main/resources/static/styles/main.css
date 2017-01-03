@@ -1,17 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-@import url("components/side-bar.css");
-@import url("components/login.css");
-@import url("components/game-rules.css");
-@import url("components/city-list.css");
-@import url("components/city-library.css");
-@import url("components/play-game.css");
-@import url("components/before-start.css");
-@import url("components/map-svg.css");
-@import url("components/register.css");
-@import url("components/timer.css");
+@import url("./components/side-bar.css");
+@import url("./components/login.css");
+@import url("./components/game-rules.css");
+@import url("./components/city-list.css");
+@import url("./components/city-library.css");
+@import url("./components/play-game.css");
+@import url("./components/before-start.css");
+@import url("./components/map-svg.css");
+@import url("./components/register.css");
+@import url("./components/timer.css");
 
-
+div {
+    box-sizing: border-box;
+}
 
 .bg-layer-1 {
     position: fixed; 
