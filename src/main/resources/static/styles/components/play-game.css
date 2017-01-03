@@ -1,6 +1,6 @@
 
 .play-game {
-    width: 58%;
+    width: 60%;
     float: left;
     padding: 30px;
 }
@@ -60,4 +60,15 @@
     font-family: Roboto, sans-serif;
     font-size: 34px;
     color: #07588a;
+}
+
+@media screen and (max-width: 1270px){
+    
+    .play-game .playField {
+        display: block;
+    }
+    .play-game .playField div {
+        text-align: center;
+    }
+
 }

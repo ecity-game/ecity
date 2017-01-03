@@ -38,8 +38,9 @@ dependencies {
 //	compile 'com.h2database:h2:1.4.192'
 	compile('mysql:mysql-connector-java:5.1.16')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile("org.springframework.social:spring-social-facebook")
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.social:spring-social-facebook:2.0.3.RELEASE')
+//	compile group: 'org.springframework.social', name: 'spring-social-facebook', version: '3.0.0.M1'
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
