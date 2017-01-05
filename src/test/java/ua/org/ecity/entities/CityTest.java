@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JUnit4.class)
@@ -34,5 +35,8 @@ public class CityTest {
 
         city.setName("Одесса");
         assertThat(city.getLastChar(), is('А'));
+
+        city.setName("");
+        assertThat(city.getLastChar(), nullValue());
     }
 }
