@@ -92,11 +92,15 @@ public class City {
     }
 
     public Character getLastChar() {
+        Character lastChar = null;
         List<Character> chars = Arrays.asList('Й', 'Ы', 'Ь', 'Ъ', 'Ц');
-        Character lastChar = name.toUpperCase().charAt(name.length() - 1);
-        if (chars.contains(lastChar)) {
-            return name.toUpperCase().charAt(name.length() - 2);
+        int i = 1;
+        do {
+            lastChar = name.toUpperCase().charAt(name.length() - i);
+            i++;
         }
+        while (chars.contains(lastChar) && i <= name.length());
+
         return lastChar;
     }
 
