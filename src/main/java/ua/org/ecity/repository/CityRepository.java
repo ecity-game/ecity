@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 
 import java.util.List;
 
@@ -16,6 +15,9 @@ public interface CityRepository extends CrudRepository<City, Integer> {
 
     @Query("FROM City c WHERE c.name LIKE CONCAT(:firstLetter, '%')")
     List<City> getByFirstLetter(@Param("firstLetter") Character firstLetter);
+
+    @Query("select count(*) from City where id = :cityId")
+    int countValues(@Param("cityId") Integer cityId);
 
     List<City> getByName(String name);
 

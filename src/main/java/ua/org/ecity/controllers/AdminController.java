@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.Region;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.RegionService;
@@ -31,17 +30,16 @@ public class AdminController {
     RegionService regionService;
 
     @RequestMapping("/admin/cities")
-    public
     @ResponseBody
-    List<CityWithStringData> cities() {
+    public List<City> cities() {
 
-        return cityService.formatAllCities(cityService.getCities());
+        return cityService.getCities();
     }
 
     @RequestMapping("/admin/city/delete/{id}")
     public AdminPanelResult deleteCity(@PathVariable("id") Integer id) {
 
-        if (cityService.getCityByID(id) == null)
+        if (cityService.checkCityNotInBase(id))
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
 
         cityService.deleteCity(id);
@@ -55,7 +53,7 @@ public class AdminController {
                                      @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
                                      @RequestParam String establishment, @RequestParam String url) {
 
-        if (cityService.getCityByID(id) == null)
+        if (cityService.checkCityNotInBase(id))
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
 
         List<City> cities = cityService.getCitiesByName(name);
@@ -65,11 +63,10 @@ public class AdminController {
                 return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, id);
         }
 
-        String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = null;
+        Date establishmentForDataBase;
         try {
-            establishmentForDataBase = format.parse(string);
+            establishmentForDataBase = format.parse(establishment);
         } catch (ParseException e) {
             return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, id);
         }
@@ -92,16 +89,17 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult addCity(@RequestParam String name, @RequestParam int regionId,
                                     @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
-                                    @RequestParam String  establishment, @RequestParam String url){
+                                    @RequestParam String establishment, @RequestParam String url) {
 
-        if (cityService.getCitiesByName(name).size() > 0)
-            return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).get(0).getId());
+        if (cityService.getCitiesByName(name).size() > 0) {
+            int id = cityService.getCity(name).get(0).getId();
+            return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, id);
+        }
 
-        String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = null;
+        Date establishmentForDataBase;
         try {
-            establishmentForDataBase = format.parse(string);
+            establishmentForDataBase = format.parse(establishment);
         } catch (ParseException e) {
             return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, 0);
         }
@@ -117,14 +115,14 @@ public class AdminController {
         city.setUrl(url);
 
         cityService.saveCity(city);
+        int newId = cityService.getCity(name).get(0).getId();
 
-        return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_ADDED, cityService.getCity(name).get(0).getId());
+        return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_ADDED, newId);
     }
 
     @RequestMapping("/admin/regions")
-    public
     @ResponseBody
-    List<Region> regions() {
+    public List<Region> regions() {
         return regionService.getRegions();
     }
 
@@ -142,14 +140,16 @@ public class AdminController {
     @ResponseBody
     public AdminPanelResult addRegion(@RequestParam String name) {
 
-        if (regionService.getRegion(name) != null)
-            return new AdminPanelResult(AdminPanelStatus.REGION_IS_IN_DATABASE, regionService.getRegion(name).getId());
-
+        if (regionService.checkIfRegionInDataBase(name)) {
+            int regionId = regionService.getRegion(name).getId();
+            return new AdminPanelResult(AdminPanelStatus.REGION_IS_IN_DATABASE, regionId);
+        }
         Region region = new Region();
         region.setName(name);
         regionService.saveRegion(region);
 
-        return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_ADDED, regionService.getRegion(name).getId());
+        int newId = regionService.getRegion(name).getId();
+        return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_ADDED, newId);
     }
 
     @RequestMapping(value = "/admin/region/edit")
@@ -159,9 +159,9 @@ public class AdminController {
         if (regionService.getRegionByID(id) == null)
             return new AdminPanelResult(AdminPanelStatus.REGION_NOT_FOUND, id);
 
-        List<Region> cities = regionService.getRegionByName(name);
-        if (cities.size() > 0) {
-            Region tempRegion = cities.get(0);
+        List<Region> regions = regionService.getRegionByName(name);
+        if (regions.size() > 0) {
+            Region tempRegion = regions.get(0);
             if (tempRegion.getId() != id)
                 return new AdminPanelResult(AdminPanelStatus.REGION_IS_IN_DATABASE, id);
         }

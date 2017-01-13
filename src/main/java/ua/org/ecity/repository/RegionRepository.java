@@ -1,6 +1,8 @@
 package ua.org.ecity.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import ua.org.ecity.entities.Region;
 
 import java.util.List;
@@ -19,4 +21,7 @@ public interface RegionRepository extends CrudRepository<Region, Integer> {
 
     @Override
     void delete(Integer integer);
+
+    @Query("select count(*) from Region where name = :regionName")
+    int countValues(@Param("regionName") String regionName);
 }

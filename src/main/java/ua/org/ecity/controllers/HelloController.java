@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.Name;
 import ua.org.ecity.repository.UserRepository;
@@ -102,29 +100,20 @@ public class HelloController {
 
     @RequestMapping("/city/{id}")
     public Object cityInfo(@PathVariable("id") int id) {
-        int index = cityService.getCities().size();
-        City tempCity = cityService.getCities().get(index - 1);
-        if (id > tempCity.getId()) {
+        if (cityService.checkCityNotInBase(id)) {
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
         }
-
-        City city = cityService.getCityByID(id);
-        return cityService.formatCity(city.getId());
+        return cityService.getCityByID(id);
     }
 
     @RequestMapping("/cities")
-    public
-    @ResponseBody
-    List<CityWithStringData> cities() {
-
-        return cityService.formatAllCities(cityService.getCities());
+    public List<City> cities() {
+        return cityService.getCities();
     }
 
 
     @RequestMapping("/names")
-    public
-    @ResponseBody
-    List<Name> names() {
+    public List<Name> names() {
         List<City> cities = cityService.getCities();
         List<Name> names = new ArrayList<>();
         for (City city : cities) {
