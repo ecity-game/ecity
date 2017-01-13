@@ -1,5 +1,8 @@
 package ua.org.ecity.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +30,12 @@ public class City {
     private int longitude;
     private int latitude;
     private int population;
+
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern="yyyy")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy")
     private Date establishment;
+
     private String url;
 
     public int getRegionId() {
