@@ -16,6 +16,9 @@ public interface CityRepository extends CrudRepository<City, Integer> {
     @Query("FROM City c WHERE c.name LIKE CONCAT(:firstLetter, '%')")
     List<City> getByFirstLetter(@Param("firstLetter") Character firstLetter);
 
+    @Query("select count(*) from City where id = :cityId")
+    int countValues(@Param("cityId") Integer cityId);
+
     List<City> getByName(String name);
 
     City getById(int id);

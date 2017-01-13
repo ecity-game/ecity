@@ -100,29 +100,20 @@ public class HelloController {
 
     @RequestMapping("/city/{id}")
     public Object cityInfo(@PathVariable("id") int id) {
-        int index = cityService.getCities().size();
-        City tempCity = cityService.getCities().get(index - 1);
-        if (id > tempCity.getId()) {
+        if (cityService.checkCityNotInBase(id)) {
             return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
         }
-
-        City city = cityService.getCityByID(id);
-        return cityService.getCityByID(city.getId());
+        return cityService.getCityByID(id);
     }
 
     @RequestMapping("/cities")
-    public
-    @ResponseBody
-    List<City> cities() {
-
+    public List<City> cities() {
         return cityService.getCities();
     }
 
 
     @RequestMapping("/names")
-    public
-    @ResponseBody
-    List<Name> names() {
+    public List<Name> names() {
         List<City> cities = cityService.getCities();
         List<Name> names = new ArrayList<>();
         for (City city : cities) {

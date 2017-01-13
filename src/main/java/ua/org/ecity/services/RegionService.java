@@ -38,4 +38,8 @@ public class RegionService {
         return regionRepository.findByName(name).get(0);
     }
 
+    public boolean checkIfRegionInDataBase(String name) {
+        return regionRepository.countValues(name) > 0;
+    }
+
 }

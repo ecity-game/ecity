@@ -45,4 +45,8 @@ public class CityService {
     public List<City> getCitiesByFirstLetter(Character firstLetter) {
         return cityRepository.getByFirstLetter(firstLetter);
     }
+
+    public boolean checkCityNotInBase (int id) {
+        return cityRepository.countValues(id) == 0;
+    }
 }
