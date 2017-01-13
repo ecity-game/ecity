@@ -7,11 +7,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "cities")
 public class City {
+
+    @Transient
+    static List<Character> EXCEPTIONAL_CHARACTERS = Arrays.asList('Й', 'Ы', 'Ь', 'Ъ', 'Ц');
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,13 +96,16 @@ public class City {
     }
 
     public Character getLastChar() {
-        return name.toUpperCase().charAt(name.length() - 1);
+        Character lastChar = null;
+        int index = name.length() - 1;
+        do {
+            if (index < 0) break;
+            lastChar = name.toUpperCase().charAt(index);
+            index--;
+        }
+        while (EXCEPTIONAL_CHARACTERS.contains(lastChar));
+        return lastChar;
     }
-
-
-//    public Character getFirstChar() {
-//        return name.toUpperCase().charAt(0);
-//    }
 
     @Override
     public String toString() {

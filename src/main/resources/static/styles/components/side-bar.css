@@ -1,13 +1,13 @@
 
 .side-bar {
     float: left;
-    width: 18%;
+    width: 20%;
 }
 .side-bar div {
     padding: 20px 35px;
 }
 .side-bar div:last-child {
-    height: 300px;
+    height: 338px;
 }
 .side-bar a {
     text-decoration: none;
