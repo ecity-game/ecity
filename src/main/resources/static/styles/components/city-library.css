@@ -1,0 +1,63 @@
+.city-library {
+    width: 59%;
+    padding: 30px 20px;
+    float: left;
+    text-align: center;
+}
+
+.city-library .table-cities,
+.city_info {
+    border: 1px solid black;
+}
+.city-library .city_info {
+    position: relative;
+    margin-top: 20px;
+    padding: 0 10px 10px 10px;
+    font-family: Roboto, sans-serif;
+    color: #07588a;
+}
+.city-library .city_info {
+    text-align: left;
+}
+.city-library .city_info h3 {
+    text-align: center;
+}
+.city-library .table-cities li {
+    list-style: none;
+    display: inline-block;
+    padding: 5px;
+    font-family: Roboto, sans-serif;
+    color: #07588a;
+}
+.city-library ul {
+    padding: 0;
+}
+
+
+.city-library .letters > li{
+    text-align: center;
+    padding: 5px;
+    display: inline-block;
+    text-align: center;
+    list-style: none;
+    font-family: Roboto, sans-serif;
+    color: #07588a;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 20px;
+    }
+.city-library h2:hover{
+    color: #fead00;
+    cursor: pointer;
+}
+
+.city-library .table-cities li:hover {
+    color: #fead00;
+    cursor: pointer;
+    text-decoration: underline;
+}
+@media screen and (max-width: 1350px){
+    .city-library .letters > li {
+        font-size: 14px;
+    }
+}

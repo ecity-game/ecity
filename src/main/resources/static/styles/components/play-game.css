@@ -1,0 +1,63 @@
+
+.play-game {
+    width: 58%;
+    float: left;
+    padding: 30px;
+}
+
+.play-game .playField {
+    display: flex;
+    justify-content: space-between;
+}
+.play-game .city {
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 183px;
+    box-shadow: 0 2px 7px rgba(0, 3, 45, 0.15);
+    color: #07588a;
+}
+
+.play-game .send {
+    width: 148px;
+    background-color: #bfe9db;
+    box-shadow: 0 2px 7px rgba(0, 3, 45, 0.15);
+    border-radius: 5px;
+    color: #07588a;
+}
+.play-game .giveUp {
+    padding: 10px 25px;
+    border-radius: 5px;
+    box-shadow: 0 2px 7px rgba(0, 3, 45, 0.15);
+    
+    
+}
+.buttonStyle {
+    height: 44px;
+    margin: 20px;
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 22px;
+    border: none;
+}
+.play-game button:hover {
+    cursor: pointer;
+}
+
+.play-game input, button:focus {
+    outline: none;
+}
+
+.warning_message {
+    text-align: left;
+    color: red;
+    padding-left: 20px;
+    font-family: Roboto, sans-serif;
+}
+
+.winner-message {
+    text-align: center;
+    font-family: Roboto, sans-serif;
+    font-size: 34px;
+    color: #07588a;
+}

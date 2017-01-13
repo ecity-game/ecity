@@ -1,16 +1,23 @@
 package ua.org.ecity.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.Game;
-import ua.org.ecity.entities.GameInfo;
+import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.Name;
-import ua.org.ecity.entities.User;
-import ua.org.ecity.entities.UserRoles;
 import ua.org.ecity.repository.UserRepository;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.UserRolesService;
@@ -21,6 +28,8 @@ import java.util.List;
 
 @RestController
 public class HelloController {
+
+    final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
     CityService cityService;
@@ -42,8 +51,10 @@ public class HelloController {
     */
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public GameStatus userRegister(@RequestParam("login") String login, @RequestParam("password") String password,
-                                   @RequestParam("email") String email, @RequestParam("firstName") String name,
+    public GameStatus userRegister(@RequestParam("login") String login,
+                                   @RequestParam("password") String password,
+                                   @RequestParam("email") String email,
+                                   @RequestParam("firstName") String name,
                                    @RequestParam("lastName") String lastame,
                                    @RequestParam("cityLive") String cityLive) {
         return userService.enterNewUserInDB(login, password, email, name, lastame, cityLive);
@@ -85,25 +96,28 @@ public class HelloController {
     public
     @ResponseBody
     List<City> city(@RequestParam(value = "name") String name) {
+        logger.info("/city 'name': " + name);
         return cityService.getCitiesByName(name);
     }
 
     @RequestMapping("/city/{id}")
-    public City cityInfo(@PathVariable("id") int id) {
-
-        if (cityService.getCityByID(id) == null) {
-            City city = new City();
-            city.setName("Wrong id");
-            return city;
+    public Object cityInfo(@PathVariable("id") int id) {
+        int index = cityService.getCities().size();
+        City tempCity = cityService.getCities().get(index - 1);
+        if (id > tempCity.getId()) {
+            return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
         }
-        return cityService.getCityByID(id);
+
+        City city = cityService.getCityByID(id);
+        return cityService.formatCity(city.getId());
     }
 
     @RequestMapping("/cities")
     public
     @ResponseBody
-    List<City> cities() {
-        return cityService.getCities();
+    List<CityWithStringData> cities() {
+
+        return cityService.formatAllCities(cityService.getCities());
     }
 
 

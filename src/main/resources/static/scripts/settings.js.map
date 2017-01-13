@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../source/scripts/settings.js"],"names":["define","host","api"],"mappings":";;AAAAA,OAAO,EAAP,EAAW,YAAY;;AAEnB,WAAO;AACHC,cAAM,8BADH;AAEHC,aAAK;AAFF,KAAP;AAIH,CAND","file":"settings.js","sourcesContent":["define([], function () {\n\n    return {\n        host: 'http://dev.ecity.org.ua:3000',\n        api: '/api'\n    };\n});\n"]}

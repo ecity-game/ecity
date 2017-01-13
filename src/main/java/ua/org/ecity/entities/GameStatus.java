@@ -13,6 +13,7 @@ public enum GameStatus {
     WRONGCITYLETTER(12, "The City start on wrong letter"),
     WINNERPLAYER1(20, " Winner Player 1"),
     WINNERPLAYER2(21, " Winner Player 2"),
+    TIMES_IS_UP(22,"Time is up. Winner player 2"),
     USER_REGISTER_OK (31,"User registration OK "),
     USER_EXIST(32,"The player exist"),
     USER_PASSWORD_INCORECT(33,"User doesn't enter password"),
