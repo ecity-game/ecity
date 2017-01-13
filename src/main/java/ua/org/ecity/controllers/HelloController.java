@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.Name;
 import ua.org.ecity.repository.UserRepository;
@@ -109,15 +107,15 @@ public class HelloController {
         }
 
         City city = cityService.getCityByID(id);
-        return cityService.formatCity(city.getId());
+        return cityService.getCityByID(city.getId());
     }
 
     @RequestMapping("/cities")
     public
     @ResponseBody
-    List<CityWithStringData> cities() {
+    List<City> cities() {
 
-        return cityService.formatAllCities(cityService.getCities());
+        return cityService.getCities();
     }
 
 

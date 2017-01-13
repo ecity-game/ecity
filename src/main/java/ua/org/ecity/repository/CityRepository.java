@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 
 import java.util.List;
 

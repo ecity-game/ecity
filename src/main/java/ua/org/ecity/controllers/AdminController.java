@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.org.ecity.entities.AdminPanelResult;
 import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
-import ua.org.ecity.entities.CityWithStringData;
 import ua.org.ecity.entities.Region;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.RegionService;
@@ -33,9 +32,9 @@ public class AdminController {
     @RequestMapping("/admin/cities")
     public
     @ResponseBody
-    List<CityWithStringData> cities() {
+    List<City> cities() {
 
-        return cityService.formatAllCities(cityService.getCities());
+        return cityService.getCities();
     }
 
     @RequestMapping("/admin/city/delete/{id}")
@@ -65,11 +64,10 @@ public class AdminController {
                 return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, id);
         }
 
-        String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = null;
+        Date establishmentForDataBase;
         try {
-            establishmentForDataBase = format.parse(string);
+            establishmentForDataBase = format.parse(establishment);
         } catch (ParseException e) {
             return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, id);
         }
@@ -97,11 +95,10 @@ public class AdminController {
         if (cityService.getCitiesByName(name).size() > 0)
             return new AdminPanelResult(AdminPanelStatus.CITY_IS_IN_DATABASE, cityService.getCity(name).get(0).getId());
 
-        String string = establishment;
         DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-        Date establishmentForDataBase = null;
+        Date establishmentForDataBase;
         try {
-            establishmentForDataBase = format.parse(string);
+            establishmentForDataBase = format.parse(establishment);
         } catch (ParseException e) {
             return new AdminPanelResult(AdminPanelStatus.WRONG_ESTABLISHMENT_VALUE, 0);
         }
