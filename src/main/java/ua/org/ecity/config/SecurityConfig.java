@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cities",
                         "/",
                         "/index.html",
-                        "/connect/**"
+                        "/connect/**",
+                        "/manager/**"
                 ).permitAll()
                 .antMatchers("/login", "/user/**", "/game/**").hasAuthority("USER")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")

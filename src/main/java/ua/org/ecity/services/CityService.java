@@ -54,9 +54,10 @@ public class CityService {
         City city = getCityByID(id);
         cityWithStringData.setId(city.getId());
         cityWithStringData.setName(city.getName());
-        cityWithStringData.setPopulation(city.getPopulation());
+        cityWithStringData.setRegionId(city.getRegionId());
         cityWithStringData.setLongitude(city.getLongitude());
         cityWithStringData.setLatitude(city.getLatitude());
+        cityWithStringData.setPopulation(city.getPopulation());
         cityWithStringData.setEstablishment(String.format("%tY", city.getEstablishment()));
         cityWithStringData.setUrl(city.getUrl());
 
