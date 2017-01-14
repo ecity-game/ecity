@@ -104,13 +104,16 @@ public class GameStatisticService {
         return new MoveResult(GameStatus.EXISTS, serverCity, clientCity);
     }
 
-    private City getServerMove(City currentCity, List<City> usedCities) {
+    public City getServerMove(City currentCity, List<City> usedCities) {
         List<City> cities = cityService.getCitiesByFirstLetter(currentCity.getLastChar());
-        for (City city : cities) {
-            if (!usedCities.contains(city)) {
-                return city;
-            }
-        }
-        return null;
+        cities.removeAll(usedCities);
+        if (cities.size() == 0) return null;
+        return cities.get((int) (Math.random() * cities.size()));
+//        for (City city : cities) {
+////            if (!usedCities.contains(city)) {
+//                return city;
+////            }
+//        }
+//        return null;
     }
 }
