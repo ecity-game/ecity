@@ -25,14 +25,13 @@ public class GameStatisticServiceTest {
     @Mock
     CityService cityService;
 
-    List<City> usedCities;
-    List<City> cities;
+    private List<City> usedCities;
+    private List<City> cities;
 
     @Before
     public void setUp() {
         usedCities = new LinkedList<>();
         cities = new LinkedList<>();
-
         for (int i = 0; i < 3; i++) {
             City city = new City();
             city.setName("Name_" + i);
@@ -43,31 +42,17 @@ public class GameStatisticServiceTest {
 
     @Test
     public void getServerMoveTest() {
-        City serverCity = null;
-
         City currentCity = new City();
-        currentCity.setName("Name_3");
+        currentCity.setName("Name");
 
         City city = new City();
         city.setName("Name_" + 10);
 
         cities.add(city);
         when(cityService.getCitiesByFirstLetter(currentCity.getLastChar())).thenReturn(cities);
-
-        serverCity = gameStatisticService.getServerMove(currentCity, usedCities);
-        assertThat(serverCity.toString(),
-                is("City{" +
-                        "id=0, " +
-                        "name='Name_10', " +
-                        "longitude=0, " +
-                        "latitude=0, " +
-                        "population=0, " +
-                        "establishment=null, " +
-                        "url='null'}"
-                ));
+        assertThat(gameStatisticService.getServerMove(currentCity, usedCities), is(city));
 
         usedCities.add(city);
-        serverCity = gameStatisticService.getServerMove(currentCity, usedCities);
-        assertThat(serverCity, is(nullValue()));
+        assertThat(gameStatisticService.getServerMove(currentCity, usedCities), is(nullValue()));
     }
 }
