@@ -7,6 +7,8 @@ import ua.org.ecity.entities.*;
 import ua.org.ecity.repository.GameRepository;
 import ua.org.ecity.repository.GameStatisticRepository;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,9 @@ public class GameStatisticService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    private Instant first = Instant.now();
+    private Instant second = Instant.now();
 
     public List<GameStatistic> getGameStatisticsByGame(Game game) {
         return gameStatisticRepository.getGameStatisticByGame(game);
@@ -59,6 +64,16 @@ public class GameStatisticService {
         return new MoveResult(GameStatus.WINNERPLAYER2, null, null);
     }
 
+    @Transactional
+    public MoveResult timeUp(Game game) {
+        if (game == null || game.isFinished()) {
+            return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
+        }
+        finish(game);
+        return new MoveResult(GameStatus.TIMES_IS_UP, null, null);
+    }
+
+
     private void finish(Game game) {
         game.setFinished(true);
         gameRepository.save(game);
@@ -70,7 +85,7 @@ public class GameStatisticService {
         if (game == null || game.isFinished()) {
             return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
-        
+
         if (clientCities.size() == 0) {
             return new MoveResult(GameStatus.NOCITY, null, null);
         }
@@ -89,6 +104,14 @@ public class GameStatisticService {
         if (usedCities.contains(clientCity)) {
             return new MoveResult(GameStatus.CITYUSE, null, null);
         }
+
+        second = Instant.now();
+        Duration duration = Duration.between(first, second);
+        if (duration.getSeconds() > 60) {
+            System.out.println("Time: " + duration.getSeconds());
+            return timeUp(game);
+        }
+        first = Instant.now();
 
         this.addGameStatistic(game, clientCity);
         usedCities.add(clientCity);
