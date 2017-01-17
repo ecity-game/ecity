@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -29,14 +30,14 @@ public class AdminController {
     @Autowired
     RegionService regionService;
 
-    @RequestMapping("/admin/cities")
+    @RequestMapping("/cities")
     @ResponseBody
     public List<City> cities() {
 
         return cityService.getCities();
     }
 
-    @RequestMapping("/admin/city/delete/{id}")
+    @RequestMapping("/city/delete/{id}")
     public AdminPanelResult deleteCity(@PathVariable("id") Integer id) {
 
         if (cityService.checkCityNotInBase(id))
@@ -47,7 +48,7 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/admin/city/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/city/edit", method = RequestMethod.POST)
     @ResponseBody
     public AdminPanelResult editCity(@RequestParam int id, @RequestParam String name, @RequestParam int regionId,
                                      @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
@@ -85,7 +86,7 @@ public class AdminController {
         return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_CHANGED, id);
     }
 
-    @RequestMapping(value = "/admin/city/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/city/add", method = RequestMethod.POST)
     @ResponseBody
     public AdminPanelResult addCity(@RequestParam String name, @RequestParam int regionId,
                                     @RequestParam int longitude, @RequestParam int latitude, @RequestParam int population,
@@ -120,13 +121,13 @@ public class AdminController {
         return new AdminPanelResult(AdminPanelStatus.CITY_HAS_BEEN_ADDED, newId);
     }
 
-    @RequestMapping("/admin/regions")
+    @RequestMapping("/regions")
     @ResponseBody
     public List<Region> regions() {
         return regionService.getRegions();
     }
 
-    @RequestMapping("/admin/region/delete/{id}")
+    @RequestMapping("/region/delete/{id}")
     public AdminPanelResult deleteRegion(@PathVariable("id") Integer id) {
 
         if (regionService.getRegionByID(id) == null)
@@ -136,7 +137,7 @@ public class AdminController {
         return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_DELETED, id);
     }
 
-    @RequestMapping(value = "/admin/region/add")
+    @RequestMapping(value = "/region/add")
     @ResponseBody
     public AdminPanelResult addRegion(@RequestParam String name) {
 
@@ -152,7 +153,7 @@ public class AdminController {
         return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_ADDED, newId);
     }
 
-    @RequestMapping(value = "/admin/region/edit")
+    @RequestMapping(value = "/region/edit")
     @ResponseBody
     public AdminPanelResult editRegion(@RequestParam int id, @RequestParam String name) {
 

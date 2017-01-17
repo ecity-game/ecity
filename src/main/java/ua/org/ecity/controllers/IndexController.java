@@ -16,6 +16,7 @@ public class IndexController {
         logger.warn("This is a warn message");
         logger.error("This is an error message");
         new SpringLoggingHelper().helpMethod();
-        return "index";
+        return "redirect:/index.html";
+//        return "index";
     }
 }
