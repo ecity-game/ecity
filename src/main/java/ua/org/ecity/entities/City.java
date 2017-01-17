@@ -119,11 +119,24 @@ public class City {
         return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", regionId=" + regionId +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
                 ", population=" + population +
-                ", establishment=" + establishment +
+                ", establishment=" + establishment.getYear() +
                 ", url='" + url + '\'' +
                 '}';
     }
+    //    @Override
+//    public String toString() {
+//        return "City{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", longitude=" + longitude +
+//                ", latitude=" + latitude +
+//                ", population=" + population +
+//                ", establishment=" + establishment.getYear() +
+//                ", url='" + url + '\'' +
+//                '}';
+//    }
 }

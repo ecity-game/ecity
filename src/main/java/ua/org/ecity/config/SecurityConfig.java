@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 
@@ -72,5 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
+    }
+
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/pages/");
+        resolver.setSuffix(".html");
+        return resolver;
     }
 }

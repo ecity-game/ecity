@@ -11,7 +11,12 @@ public class WebController {
 
     @GetMapping
     public String index(Model model) {
-        return "redirect:/index.html";
+        return "redirect:app/index.html";
     }
 
+    @GetMapping
+    @RequestMapping("/manager")
+    public String manager(Model model) {
+        return "redirect:manager/admin-panel.html";
+    }
 }

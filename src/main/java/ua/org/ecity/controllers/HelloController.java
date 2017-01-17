@@ -16,8 +16,10 @@ import ua.org.ecity.entities.AdminPanelStatus;
 import ua.org.ecity.entities.City;
 import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.Name;
+import ua.org.ecity.entities.Region;
 import ua.org.ecity.repository.UserRepository;
 import ua.org.ecity.services.CityService;
+import ua.org.ecity.services.RegionService;
 import ua.org.ecity.services.UserRolesService;
 import ua.org.ecity.services.UserService;
 
@@ -31,6 +33,9 @@ public class HelloController {
 
     @Autowired
     CityService cityService;
+
+    @Autowired
+    RegionService regionService;
 
     @Autowired
     UserService userService;
@@ -86,9 +91,7 @@ public class HelloController {
 //
 //
 //        return GameStatus.USER_PASSWORD_INCORECT;
-
     }
-
 
     @RequestMapping("/city")
     public
@@ -106,11 +109,31 @@ public class HelloController {
         return cityService.getCityByID(id);
     }
 
+    @RequestMapping("/city/region/{id}")
+    public Object getCityByRegionId(@PathVariable("id") int id) {
+        if (cityService.checkCityNotInBase(id)) {
+            return new AdminPanelResult(AdminPanelStatus.CITY_NOT_FOUND, id);
+        }
+        return cityService.getCitiesByRegionId(id);
+    }
+
     @RequestMapping("/cities")
     public List<City> cities() {
         return cityService.getCities();
     }
 
+    @RequestMapping("/regions")
+    public List<Region> regions() {
+        return regionService.getRegions();
+    }
+
+    @RequestMapping("/region")
+    public
+    @ResponseBody
+    List<Region> regionByName(@RequestParam(value = "name") String name) {
+        logger.info("/region 'name': " + name);
+        return regionService.getRegionByName(name);
+    }
 
     @RequestMapping("/names")
     public List<Name> names() {

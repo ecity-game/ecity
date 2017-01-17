@@ -13,11 +13,16 @@ public interface CityRepository extends CrudRepository<City, Integer> {
 
     List<City> findByName(String name);
 
+    List<City> findByRegionId(Integer regionId);
+
     @Query("FROM City c WHERE c.name LIKE CONCAT(:firstLetter, '%')")
     List<City> getByFirstLetter(@Param("firstLetter") Character firstLetter);
 
     @Query("select count(*) from City where id = :cityId")
     int countValues(@Param("cityId") Integer cityId);
+
+//    @Query("FROM City c WHERE c.region_id = :regionId")
+//    List<City> getByRegionId(@Param("regionId") Integer regionId);
 
     List<City> getByName(String name);
 
