@@ -180,10 +180,10 @@ public class AdminController {
         return new AdminPanelResult(AdminPanelStatus.REGION_HAS_BEEN_CHANGED, id);
     }
 
-    @RequestMapping("/admin/update")
+    @RequestMapping("/update")
     @ResponseBody
     public List<City> updateDB() {
-        logger.info("GET: /admin/db_update");
+        logger.info("GET: /admin/update");
         List<City> cities = cityService.getCities();
         List<City> citiesNew = new LinkedList<>();
         for (City city : cities) {
@@ -192,7 +192,18 @@ public class AdminController {
         return citiesNew;
     }
 
-    @RequestMapping("/admin/update/{id}")
+    @RequestMapping("/update/commit")
+    @ResponseBody
+    public String commitUpdate() {
+        logger.info("GET: /update/commit");
+        List<City> cities = updateDB();
+        for (City city : cities) {
+            cityService.saveCity(city);
+        }
+        return "redirect: /manager";
+    }
+
+    @RequestMapping("/update/{id}")
     public City updateCity(@PathVariable("id") Integer id) {
         if (cityService.getCityByID(id) == null) return null;
         return cityService.update(cityService.getCityByID(id));

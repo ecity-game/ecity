@@ -81,9 +81,12 @@ public class CityService {
                     int index = region.indexOf(region.substring(0, 2), 1);
                     if (index > 0) {
                         region = region.substring(0, index);
-                        List<Region> regions = regionRepository.findByName(region);
+                    }
+                    List<Region> regions = regionRepository.findByName(region);
+                    try {
                         Region regionFromDB = regions.get(0);
                         regionId = regionFromDB.getId();
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -91,7 +94,8 @@ public class CityService {
                     String[] strs = el.text().split(" ", 2);
                     try {
                         year = Integer.parseInt(strs[1]);
-                    } catch (Exception e) { }
+                    } catch (Exception ignored) {
+                    }
                 }
 
                 if (el.text().startsWith(ESTABLISHMENT_2)) {
@@ -99,7 +103,8 @@ public class CityService {
                     if (year == 0) {
                         try {
                             year = Integer.parseInt(strs[2]);
-                        } catch (Exception e) { }
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
 
@@ -141,7 +146,8 @@ public class CityService {
             logger.info("Population:");
             try {
                 population = Integer.parseInt(populationS);
-            } catch (Exception e) { }
+            } catch (Exception ignored) {
+            }
             if (population != city.getPopulation()) {
                 logger.info("old: " + city.getPopulation());
                 city.setPopulation(population);
