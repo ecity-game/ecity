@@ -109,6 +109,8 @@ public class GameStatisticService {
         Duration duration = Duration.between(first, second);
         if (duration.getSeconds() > 60) {
             System.out.println("Time: " + duration.getSeconds());
+            first = Instant.now();
+            second = Instant.now();
             return timeUp(game);
         }
         first = Instant.now();
