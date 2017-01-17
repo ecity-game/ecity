@@ -61,7 +61,7 @@ public class GameStatisticService {
             return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
         finish(game);
-        return new MoveResult(GameStatus.WINNERPLAYER2, null, null);
+        return new MoveResult(GameStatus.WINNER_PLAYER_2, null, null);
     }
 
     @Transactional
@@ -87,7 +87,7 @@ public class GameStatisticService {
         }
 
         if (clientCities.size() == 0) {
-            return new MoveResult(GameStatus.NOCITY, null, null);
+            return new MoveResult(GameStatus.NO_CITY, null, null);
         }
 
         City clientCity = clientCities.get(0);
@@ -97,12 +97,12 @@ public class GameStatisticService {
 
         if (usedCities.size() != 0) {
             if (clientCity.getName().charAt(0) != usedCities.get(usedCities.size() - 1).getLastChar()) {
-                return new MoveResult(GameStatus.WRONGCITYLETTER, null, null);
+                return new MoveResult(GameStatus.WRONG_CITY_LETTER, null, null);
             }
         }
 
         if (usedCities.contains(clientCity)) {
-            return new MoveResult(GameStatus.CITYUSE, null, null);
+            return new MoveResult(GameStatus.CITY_USE, null, null);
         }
 
         second = Instant.now();
@@ -122,7 +122,7 @@ public class GameStatisticService {
 
         if (serverCity == null) {
             finish(game);
-            return new MoveResult(GameStatus.WINNERPLAYER1, null, clientCity);
+            return new MoveResult(GameStatus.WINNER_PLAYER_1, null, clientCity);
         }
 
         this.addGameStatistic(game, serverCity);
