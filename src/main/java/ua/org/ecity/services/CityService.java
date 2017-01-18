@@ -14,8 +14,11 @@ import ua.org.ecity.repository.CityRepository;
 import ua.org.ecity.repository.RegionRepository;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class CityService {
@@ -64,7 +67,7 @@ public class CityService {
     public City update(City city) {
         try {
             int regionId = 0;
-            int year = 0;
+            String year = "";
             int population = 0;
             String populationS = "";
             String gps = "";
@@ -92,19 +95,13 @@ public class CityService {
 
                 if (el.text().startsWith(ESTABLISHMENT)) {
                     String[] strs = el.text().split(" ", 2);
-                    try {
-                        year = Integer.parseInt(strs[1]);
-                    } catch (Exception ignored) {
-                    }
+                    year = strs[1];
                 }
 
                 if (el.text().startsWith(ESTABLISHMENT_2)) {
                     String[] strs = el.text().split(" ");
-                    if (year == 0) {
-                        try {
-                            year = Integer.parseInt(strs[2]);
-                        } catch (Exception ignored) {
-                        }
+                    if (year.isEmpty()) {
+                        year = strs[2];
                     }
                 }
 
@@ -132,15 +129,21 @@ public class CityService {
                 logger.info("OK");
             }
 
-            Date establishment = new Date();
-            establishment.setYear(year);
+
             logger.info("Establishment:");
-            if (!establishment.equals(city.getEstablishment().getYear())) {
-                logger.info("old: " + city.getEstablishment().getYear());
-                city.setEstablishment(establishment);
-                logger.info("new:" + city.getEstablishment().getYear());
-            } else {
-                logger.info("OK");
+            DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+            Date establishment;
+            try {
+                establishment = format.parse(year);
+                if (!establishment.equals(city.getEstablishment().getYear())) {
+                    logger.info("old: " + city.getEstablishment().getYear());
+                    city.setEstablishment(establishment);
+                    logger.info("new:" + city.getEstablishment().getYear());
+                } else {
+                    logger.info("OK");
+                }
+            } catch (Exception e) {
+                logger.info("Error: " + e);
             }
 
             logger.info("Population:");
