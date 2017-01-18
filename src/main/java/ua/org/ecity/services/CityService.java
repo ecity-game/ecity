@@ -28,13 +28,15 @@ public class CityService {
     @Autowired
     private CityRepository cityRepository;
     @Autowired
-    RegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     private static final String REGION = "Область";
+    private static final String ARC = "Автономная Республика Крым";
     private static final String ESTABLISHMENT = "Основан";
+    private static final String ESTABLISHMENT_1 = "Дата основания";
     private static final String ESTABLISHMENT_2 = "Первое упоминание";
     private static final String POPULATION = "Население";
-    private static final String GPS = "Координаты";
+//    private static final String GPS = "Координаты";
 
     public List<City> getCitiesByName(String name) {
         return cityRepository.findByName(name);
@@ -67,16 +69,19 @@ public class CityService {
     public City update(City city) {
         try {
             int regionId = 0;
-            String year = "";
+            String year = "0";
             int population = 0;
-            String populationS = "";
-            String gps = "";
+//            String gps = "";
 
             Document doc = Jsoup.connect(city.getUrl()).get();
 
             Elements vcard = doc.select("table.infobox.vcard");
             Elements tr = vcard.select("tr");
             for (Element el : tr) {
+
+                if (el.text().contains(ARC)) {
+                    regionId = 5;
+                }
 
                 if (el.text().startsWith(REGION)) {
                     String[] strs = el.text().split(" ", 2);
@@ -98,22 +103,41 @@ public class CityService {
                     year = strs[1];
                 }
 
+                if (el.text().startsWith(ESTABLISHMENT_1)) {
+                    String[] strs = el.text().split(" ");
+                    if (year.equals("0")) {
+                        year = strs[2];
+                    }
+                }
+
                 if (el.text().startsWith(ESTABLISHMENT_2)) {
                     String[] strs = el.text().split(" ");
-                    if (year.isEmpty()) {
+                    if (year.equals("0")) {
                         year = strs[2];
                     }
                 }
 
                 if (el.text().startsWith(POPULATION)) {
-                    String[] strs = el.text()
-                            .split(" ", 2)[1]
-                            .split("\\[")[0]
-                            .split("\\(")[0]
-                            .split("\\D+");
-
-                    for (String str : strs) {
-                        populationS += str;
+                    try {
+                        String[] strs = el.text()
+                                .split(" ", 2)[1]
+                                .split("\\[")[0]
+                                .split("\\(");
+                        if (strs[0].contains(",")) {
+                            strs = strs[0].split(",");
+                            population = (int) (1000 * Double.parseDouble(
+                                    strs[0].split("\\D+") + "." + strs[1].split("\\D+")
+                            ));
+                        } else {
+                            strs = strs[0].split("\\D+");
+                            String popS = "";
+                            for (String s : strs) {
+                                popS += s;
+                            }
+                            population = Integer.parseInt(popS);
+                        }
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
                     }
                 }
             }
@@ -128,7 +152,6 @@ public class CityService {
             } else {
                 logger.info("OK");
             }
-
 
             logger.info("Establishment:");
             DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
@@ -147,10 +170,6 @@ public class CityService {
             }
 
             logger.info("Population:");
-            try {
-                population = Integer.parseInt(populationS);
-            } catch (Exception ignored) {
-            }
             if (population != city.getPopulation()) {
                 logger.info("old: " + city.getPopulation());
                 city.setPopulation(population);
@@ -162,7 +181,7 @@ public class CityService {
             logger.info("} " + city.getName());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return city;
     }

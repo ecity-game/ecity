@@ -194,18 +194,21 @@ public class AdminController {
 
     @RequestMapping("/update/commit")
     @ResponseBody
-    public String commitUpdate() {
+    public List<City> commitUpdate() {
         logger.info("GET: /update/commit");
         List<City> cities = updateDB();
         for (City city : cities) {
             cityService.saveCity(city);
         }
-        return "redirect: /manager";
+        return cities;
     }
 
     @RequestMapping("/update/{id}")
     public City updateCity(@PathVariable("id") Integer id) {
         if (cityService.getCityByID(id) == null) return null;
-        return cityService.update(cityService.getCityByID(id));
+        City city = cityService.getCityByID(id);
+        city = cityService.update(city);
+        cityService.saveCity(city);
+        return city;
     }
 }
