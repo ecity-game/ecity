@@ -16,6 +16,7 @@ import ua.org.ecity.repository.RegionRepository;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,8 +36,9 @@ public class CityService {
     private static final String ESTABLISHMENT = "Основан";
     private static final String ESTABLISHMENT_1 = "Дата основания";
     private static final String ESTABLISHMENT_2 = "Первое упоминание";
+    private static final String ESTABLISHMENT_3 = "Город с";
     private static final String POPULATION = "Население";
-//    private static final String GPS = "Координаты";
+    private static final String LOCATION = "Координаты";
 
     public List<City> getCitiesByName(String name) {
         return cityRepository.findByName(name);
@@ -69,8 +71,10 @@ public class CityService {
     public City update(City city) {
         try {
             int regionId = 0;
-            String year = "0";
+            String year = "0000";
             int population = 0;
+            double longitude = 0;
+            double latitude = 0;
 //            String gps = "";
 
             Document doc = Jsoup.connect(city.getUrl()).get();
@@ -94,7 +98,8 @@ public class CityService {
                     try {
                         Region regionFromDB = regions.get(0);
                         regionId = regionFromDB.getId();
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
                     }
                 }
 
@@ -103,18 +108,26 @@ public class CityService {
                     year = strs[1];
                 }
 
-                if (el.text().startsWith(ESTABLISHMENT_1)) {
+                if (year.equals("0000") && el.text().startsWith(ESTABLISHMENT_1)) {
                     String[] strs = el.text().split(" ");
-                    if (year.equals("0")) {
-                        year = strs[2];
+                    year = strs[2];
+                }
+
+                if (year.equals("0000") && el.text().startsWith(ESTABLISHMENT_2)) {
+                    String[] strs = el.text().split(" ");
+                    year = strs[2];
+                    try {
+                        int test = Integer.parseInt(year);
+                    } catch (Exception e) {
+                        year = "0000";
+                        logger.info(e.getMessage());
                     }
                 }
 
-                if (el.text().startsWith(ESTABLISHMENT_2)) {
+                if (year.equals("0000") && el.text().startsWith(ESTABLISHMENT_3)) {
                     String[] strs = el.text().split(" ");
-                    if (year.equals("0")) {
-                        year = strs[2];
-                    }
+                    logger.info(Arrays.toString(strs));
+                    year = strs[1];
                 }
 
                 if (el.text().startsWith(POPULATION)) {
@@ -125,9 +138,8 @@ public class CityService {
                                 .split("\\(");
                         if (strs[0].contains(",")) {
                             strs = strs[0].split(",");
-                            population = (int) (1000 * Double.parseDouble(
-                                    strs[0].split("\\D+") + "." + strs[1].split("\\D+")
-                            ));
+                            population = (int) (1000 * Double
+                                    .parseDouble(strs[0].split("\\D+") + "." + strs[1].split("\\D+")));
                         } else {
                             strs = strs[0].split("\\D+");
                             String popS = "";
@@ -140,44 +152,76 @@ public class CityService {
                         logger.error(e.getMessage());
                     }
                 }
+
+                if (el.text().startsWith(LOCATION)) {
+                    Elements geo = el.select("span").select("a");
+                    try {
+                        latitude = Double.parseDouble(geo.get(0).attr("data-lat"));
+                        longitude = Double.parseDouble(geo.get(0).attr("data-lon"));
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
+                    }
+                }
             }
 
             logger.info(city.getName() + " {");
 
-            logger.info("Region:");
+            logger.info("\tRegion:");
             if (regionId > 0 && regionId != city.getRegionId()) {
-                logger.info("old: " + city.getRegionId());
+                logger.info("\t\told: " + city.getRegionId());
                 city.setRegionId(regionId);
-                logger.info("new: " + city.getRegionId());
+                logger.info("\t\tnew: " + city.getRegionId());
             } else {
-                logger.info("OK");
+                logger.info("\t\tOK");
             }
 
-            logger.info("Establishment:");
+            logger.info("\tEstablishment:");
             DateFormat format = new SimpleDateFormat("yyyy", Locale.ENGLISH);
             Date establishment;
             try {
+                if (year.split("\\D+").length > 1) {
+                    year = year.split("\\D+")[1];
+                }
                 establishment = format.parse(year);
-                if (!establishment.equals(city.getEstablishment().getYear())) {
-                    logger.info("old: " + city.getEstablishment().getYear());
+                Date establishmentDB = format.parse(city.getEstablishment().toString());
+                if (!establishment.equals(establishmentDB)) {
+                    logger.info("\t\told: " + establishmentDB);
                     city.setEstablishment(establishment);
-                    logger.info("new:" + city.getEstablishment().getYear());
+                    logger.info("\t\tnew:" + city.getEstablishment().getYear());
                 } else {
-                    logger.info("OK");
+                    logger.info("\t\tOK");
                 }
             } catch (Exception e) {
-                logger.info("Error: " + e);
+                logger.info("\tError: " + e);
             }
 
-            logger.info("Population:");
+            logger.info("\tPopulation:");
             if (population != city.getPopulation()) {
-                logger.info("old: " + city.getPopulation());
+                logger.info("\t\told: " + city.getPopulation());
                 city.setPopulation(population);
-                logger.info("new: " + city.getPopulation());
+                logger.info("\t\tnew: " + city.getPopulation());
             } else {
-                logger.info("OK");
+                logger.info("\t\tOK");
             }
 
+            logger.info("\tLocation {");
+            logger.info("\t\tLatitude:");
+            if (latitude != city.getLatitude()) {
+                logger.info("\t\t\told: " + city.getLatitude());
+                city.setLatitude(latitude);
+                logger.info("\t\t\tnew: " + city.getLatitude());
+            } else {
+                logger.info("\t\t\tOK");
+            }
+            logger.info("\t\tLongitude:");
+            if (longitude != city.getLongitude()) {
+                logger.info("\t\t\told: " + city.getLongitude());
+                city.setLongitude(longitude);
+                logger.info("\t\t\tnew: " + city.getLongitude());
+            } else {
+                logger.info("\t\t\tOK");
+            }
+            logger.info("\t}");
             logger.info("} " + city.getName());
 
         } catch (IOException e) {
