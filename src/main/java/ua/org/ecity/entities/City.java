@@ -27,8 +27,8 @@ public class City {
     private int id;
     private String name;
     private int regionId;
-    private int longitude;
-    private int latitude;
+    private double latitude;
+    private double longitude;
     private int population;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -70,19 +70,19 @@ public class City {
         this.url = url;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
@@ -119,10 +119,11 @@ public class City {
         return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", longitude=" + longitude +
+                ", regionId=" + regionId +
                 ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", population=" + population +
-                ", establishment=" + establishment +
+                ", establishment=" + establishment.getYear() +
                 ", url='" + url + '\'' +
                 '}';
     }

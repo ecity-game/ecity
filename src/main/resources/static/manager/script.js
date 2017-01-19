@@ -11,48 +11,59 @@ $(document).ready(function() {
        return password = $(".form-authorization #password").val();
     });
 
-    // Авторизация и получение массива с городами
-    $(".authorization").on('click', function() {
-
+    //Авторизация и получение массива с городами
+    function Authorization() {
+      
       if ( login || password ) {
 
-          $.ajax({
-            xhrFields: {
-              withCredentials: true
-            },
-            beforeSend: function() {
-              $('body').append('<div class="loader"><img src="img/loading.gif"></div>');
-            },
-            headers: {
-                'Authorization': 'Basic ' + btoa(login+':'+password)
-            },
-            url: "http://ecity.org.ua:8080/admin/cities",
-            dataType: 'json',
-            type: 'POST',
-            success: function(data) {
-              $(".wrapp-authorization").hide();
-              data.forEach(function(item) {
-                $(".table").append('<div class="item-city-wrap"><div class="item-city"><input type="text" value="'+ item.id +'" class="id-city" readonly><input type="text" value="'+ item.name +'" class="name-city" readonly><input type="text" value="' + item.regionId +'" class="region-city" readonly><input type="text" value="' + item.latitude +'" class="positionX-city" readonly><input type="text" value="' + item.longitude +'" class="positionY-city" readonly><input type="text" value="' + item.establishment +'" class="establishment-city" readonly><input type="text" value="' + item.population +'" class="population-city" readonly><textarea class="info-city" readonly>'+ item.url +'</textarea></div><span class="edit"></span><span class="save"></span><span class="delete"></span></div>');
-              });
-            },
-            error:function() { 
-              alert('Данный логин или пароль не найден! Повторите попытку');
-              $(".form-authorization #login").val('');
-              $(".form-authorization #password").val('');
-            },
-            complete: function(){
-              $('.loader').remove();
-            }
+        $.ajax({
+          xhrFields: {
+            withCredentials: true
+          },
+          beforeSend: function() {
+            $('body').append('<div class="loader"><img src="img/loading.gif"></div>');
+          },
+          headers: {
+              'Authorization': 'Basic ' + btoa(login+':'+password)
+          },
+          url: "http://ecity.org.ua:8080/admin/cities",
+          dataType: 'json',
+          type: 'POST',
+          success: function(data) {
+            $(".wrapp-authorization").hide();
+            $("header").show();
+            data.forEach(function(item) {
+              $(".table").append('<div class="item-city-wrap"><div class="item-city"><input type="text" value="'+ item.id +'" class="id-city" readonly><input type="text" value="'+ item.name +'" class="name-city" readonly><input type="text" value="' + item.regionId +'" class="region-city" readonly><input type="text" value="' + item.latitude +'" class="positionX-city" readonly><input type="text" value="' + item.longitude +'" class="positionY-city" readonly><input type="text" value="' + item.establishment +'" class="establishment-city" readonly><input type="text" value="' + item.population +'" class="population-city" readonly><textarea class="info-city" readonly>'+ item.url +'</textarea></div><span class="edit"></span><span class="save"></span><span class="delete"></span></div>');
+            });
+          },
+          error:function() { 
+            alert('Данный логин или пароль не найден! Повторите попытку');
+            $(".form-authorization #login").val('');
+            $(".form-authorization #password").val('');
+          },
+          complete: function(){
+            $('.loader').remove();
+          }
 
-          });
+        });
 
       }
 
       else { alert("Все поля должны быть заполнены. Допускается только буквы английского алфовита")}
+    }
 
+    //Авторизация по клику на кнопку формы
+    $(".authorization").on('click', function() {
+      Authorization();
     });
 
 
+    // Авторизация по клику на enter
+    $('.form-authorization input').keydown(function(e) {
+      if(e.keyCode === 13) {
+        Authorization();
+      }
+    });
 
     // редактирование строки города
     $(".table").on('click', 'span.edit', function() {
@@ -350,10 +361,17 @@ $(document).ready(function() {
     });
 
     // поиск города в таблице при нажатии энтера в поле ввода
-    $('input').keydown(function(e) {
+    $('input#spterm').keydown(function(e) {
       if(e.keyCode === 13) {
         search();
       }
+    });
+
+    // редактирование строки города
+    $(".close").on('click', function() {
+        
+        location.reload();
+
     });
 
 
