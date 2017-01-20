@@ -3,6 +3,8 @@ package ua.org.ecity.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -182,8 +184,8 @@ public class AdminController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public List<City> updateDB() {
-        logger.info("GET: /admin/update");
+    public List<City> updateDB(@AuthenticationPrincipal final UserDetails user) {
+        logger.info(user.getUsername() + " GET: /admin/update");
         List<City> cities = cityService.getCities();
         List<City> citiesNew = new LinkedList<>();
         for (City city : cities) {
@@ -194,9 +196,9 @@ public class AdminController {
 
     @RequestMapping("/update/commit")
     @ResponseBody
-    public List<City> commitUpdate() {
+    public List<City> commitUpdate(@AuthenticationPrincipal final UserDetails user) {
         logger.info("GET: /update/commit");
-        List<City> cities = updateDB();
+        List<City> cities = updateDB(user);
         for (City city : cities) {
             cityService.saveCity(city);
         }
@@ -204,8 +206,11 @@ public class AdminController {
     }
 
     @RequestMapping("/update/{id}")
-    public City updateCity(@PathVariable("id") Integer id) {
-        if (cityService.getCityByID(id) == null) return null;
+    public City updateCity(@AuthenticationPrincipal final UserDetails user, @PathVariable("id") Integer id) {
+        logger.info(user.getUsername() + " GET: /admin/update/" + id);
+        if (cityService.getCityByID(id) == null) {
+            return null;
+        }
         City city = cityService.getCityByID(id);
         city = cityService.update(city);
         cityService.saveCity(city);
