@@ -39,6 +39,7 @@ public class CityService {
     private static final String ESTABLISHMENT_3 = "Город с";
     private static final String POPULATION = "Население";
     private static final String LOCATION = "Координаты";
+    private static final String ARMS = "Герб";
 
     public List<City> getCitiesByName(String name) {
         return cityRepository.findByName(name);
@@ -75,7 +76,7 @@ public class CityService {
             int population = 0;
             double longitude = 0;
             double latitude = 0;
-//            String gps = "";
+            String arms = "";
 
             Document doc = Jsoup.connect(city.getUrl()).get();
 
@@ -164,6 +165,14 @@ public class CityService {
                 }
             }
 
+            Elements images = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+            for (Element image : images) {
+                if (image.attr("alt").equals(ARMS)) {
+                    arms = "https:" + image.attr("src");
+                    break;
+                }
+            }
+
             logger.info(city.getName() + " {");
 
             logger.info("\tRegion:");
@@ -222,6 +231,16 @@ public class CityService {
                 logger.info("\t\t\tOK");
             }
             logger.info("\t}");
+
+            logger.info("\tArms:");
+            if (!arms.equals(city.getArms())) {
+                logger.info("\t\told: " + city.getArms());
+                city.setArms(arms);
+                logger.info("\t\tnew: " + city.getArms());
+            } else {
+                logger.info("\t\tOK");
+            }
+
             logger.info("} " + city.getName());
 
         } catch (IOException e) {

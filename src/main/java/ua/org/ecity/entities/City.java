@@ -44,13 +44,20 @@ public class City {
     private double latitude;
     private double longitude;
     private int population;
-
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern="yyyy")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy")
     private Date establishment;
-
     private String url;
+    private String arms;
+
+    public String getArms() {
+        return arms;
+    }
+
+    public void setArms(String arms) {
+        this.arms = arms;
+    }
 
     public int getRegionId() {
         return regionId;
@@ -147,6 +154,7 @@ public class City {
                 ", population=" + population +
                 ", establishment=" + establishment.getYear() +
                 ", url='" + url + '\'' +
+                ", arms='" + arms + '\'' +
                 '}';
     }
 }
