@@ -26,7 +26,6 @@ public class GameStatisticService {
     private Instant first = Instant.now();
     private Instant second = Instant.now();
 
-
     public List<GameStatistic> getGameStatisticsByGame(Game game) {
         return gameStatisticRepository.getGameStatisticByGame(game);
     }
@@ -62,8 +61,18 @@ public class GameStatisticService {
             return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
         finish(game);
-        return new MoveResult(GameStatus.WINNERPLAYER2, null, null);
+        return new MoveResult(GameStatus.WINNER_PLAYER_2, null, null);
     }
+
+    @Transactional
+    public MoveResult timeUp(Game game) {
+        if (game == null || game.isFinished()) {
+            return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
+        }
+        finish(game);
+        return new MoveResult(GameStatus.TIMES_IS_UP, null, null);
+    }
+
 
     private void finish(Game game) {
         game.setFinished(true);
@@ -73,14 +82,12 @@ public class GameStatisticService {
     @Transactional
     public MoveResult step(Game game, List<City> clientCities) {
 
-
         if (game == null || game.isFinished()) {
             return new MoveResult(GameStatus.DOESNT_EXIST, null, null);
         }
 
         if (clientCities.size() == 0) {
-
-            return new MoveResult(GameStatus.NOCITY, null, null);
+            return new MoveResult(GameStatus.NO_CITY, null, null);
         }
 
         City clientCity = clientCities.get(0);
@@ -90,20 +97,24 @@ public class GameStatisticService {
 
         if (usedCities.size() != 0) {
             if (clientCity.getName().charAt(0) != usedCities.get(usedCities.size() - 1).getLastChar()) {
-                return new MoveResult(GameStatus.WRONGCITYLETTER, null, null);
+                return new MoveResult(GameStatus.WRONG_CITY_LETTER, null, null);
             }
         }
 
         if (usedCities.contains(clientCity)) {
-            return new MoveResult(GameStatus.CITYUSE, null, null);
+            return new MoveResult(GameStatus.CITY_USE, null, null);
         }
+
         second = Instant.now();
         Duration duration = Duration.between(first, second);
         if (duration.getSeconds() > 60) {
-            System.out.println("Time: "+duration.getSeconds());
-            return new MoveResult(GameStatus.TIMES_IS_UP,null,null);
+            System.out.println("Time: " + duration.getSeconds());
+            first = Instant.now();
+            second = Instant.now();
+            return timeUp(game);
         }
-        first=Instant.now();
+        first = Instant.now();
+
         this.addGameStatistic(game, clientCity);
         usedCities.add(clientCity);
 
@@ -111,9 +122,8 @@ public class GameStatisticService {
 
         if (serverCity == null) {
             finish(game);
-            return new MoveResult(GameStatus.WINNERPLAYER1, null, clientCity);
+            return new MoveResult(GameStatus.WINNER_PLAYER_1, null, clientCity);
         }
-
 
         this.addGameStatistic(game, serverCity);
         return new MoveResult(GameStatus.EXISTS, serverCity, clientCity);
