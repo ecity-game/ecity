@@ -32063,15 +32063,15 @@
 	        },
 
 	        onFormSubmit: function onFormSubmit(event) {
-	            /*
-	                        var user = this.state.login;
-	                        var password = this.state.password;
-	            */
+	            var user = this.state.login;
+	            var password = this.state.password;
 
 	            var warningMessage = '';
 
-	            var user = 'user2';
-	            var password = 'password1';
+	            /*
+	                        var user = 'user2';
+	                        var password = 'password1';
+	            */
 
 	            if (user && password) {
 	                this.props.game.logIn(user, password).then(function () {
@@ -32725,6 +32725,17 @@
 	                        'h3',
 	                        null,
 	                        this.state.cityInfo.name
+	                    ),
+	                    React.createElement('img', { src: this.state.cityInfo.arms, alt: this.state.cityInfo.name }),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            '\u0413\u043E\u0434 \u043E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u044F: '
+	                        ),
+	                        this.state.cityInfo.establishment
 	                    ),
 	                    React.createElement(
 	                        'p',
