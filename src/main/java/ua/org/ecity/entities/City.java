@@ -20,23 +20,44 @@ import java.util.List;
 public class City {
 
     @Transient
-    static List<Character> EXCEPTIONAL_CHARACTERS = Arrays.asList('Й', 'Ы', 'Ь', 'Ъ', 'Ц');
+    private static List<Character> EXCEPTIONAL_CHARACTERS = Arrays.asList('Й', 'Ы', 'Ь', 'Ъ', 'Ц');
+
+    @Transient
+    private static double NORTH = 52.33444;
+    @Transient
+    private static double SOUTH = 44.38722;
+    @Transient
+    private static double WEST = 22.43056;
+    @Transient
+    private static double EAST = 40.19806;
+
+    @Transient
+    private static double HEIGHT = NORTH - SOUTH; //7.94722;
+    @Transient
+    private static double WIDTH = EAST - WEST; //18.03417;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private int regionId;
-    private int longitude;
-    private int latitude;
+    private double latitude;
+    private double longitude;
     private int population;
-
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern="yyyy")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy")
     private Date establishment;
-
     private String url;
+    private String arms;
+
+    public String getArms() {
+        return arms;
+    }
+
+    public void setArms(String arms) {
+        this.arms = arms;
+    }
 
     public int getRegionId() {
         return regionId;
@@ -70,19 +91,19 @@ public class City {
         this.url = url;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
@@ -114,16 +135,26 @@ public class City {
         return lastChar;
     }
 
+    public double getX() {
+        return ((NORTH - latitude) * 100) / HEIGHT;
+    }
+
+    public double getY() {
+        return ((longitude - WEST) * 100) / WIDTH;
+    }
+
     @Override
     public String toString() {
         return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", longitude=" + longitude +
+                ", regionId=" + regionId +
                 ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", population=" + population +
-                ", establishment=" + establishment +
+                ", establishment=" + establishment.getYear() +
                 ", url='" + url + '\'' +
+                ", arms='" + arms + '\'' +
                 '}';
     }
 }

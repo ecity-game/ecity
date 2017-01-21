@@ -56,7 +56,7 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(35), __webpack_require__(197), __webpack_require__(252), __webpack_require__(255), __webpack_require__(256), __webpack_require__(2), __webpack_require__(261), __webpack_require__(263), __webpack_require__(264), __webpack_require__(265)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, ReactDom, ReactRouter, Q, Login, Ecity, Rules, Library, BeforeStart, Game, Register) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(35), __webpack_require__(197), __webpack_require__(252), __webpack_require__(255), __webpack_require__(256), __webpack_require__(2), __webpack_require__(261), __webpack_require__(263), __webpack_require__(264), __webpack_require__(265), __webpack_require__(266)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, ReactDom, ReactRouter, Q, Login, Ecity, Rules, Library, BeforeStart, Game, Register, Page404) {
 
 	    var Router = ReactRouter.Router;
 	    var Route = ReactRouter.Route;
@@ -105,7 +105,8 @@
 	                React.createElement(Route, { path: '/rules', getComponent: getComponent(Rules), onEnter: requireLogIn }),
 	                React.createElement(Route, { path: '/library', getComponent: getComponent(Library), onEnter: requireLogIn }),
 	                React.createElement(Route, { path: '/before-start', getComponent: getComponent(BeforeStart), onEnter: requireLogIn }),
-	                React.createElement(Route, { path: '/register', getComponent: getComponent(Register) })
+	                React.createElement(Route, { path: '/register', getComponent: getComponent(Register) }),
+	                React.createElement(Route, { path: '*', getComponent: getComponent(Page404) })
 	            );
 	        }
 	    });
@@ -24774,10 +24775,9 @@
 	                    'ul',
 	                    { className: 'ul-city' },
 	                    this.props.cities && this.props.cities.map(function (city, i) {
-
 	                        return React.createElement(
 	                            'li',
-	                            { key: city.id, onClick: _this.onClickButton.bind(_this, city) },
+	                            { key: city.id, onClick: _this.onClickButton.bind(_this, city), className: i === 0 ? 'highlightLastCity' : 'noHighlightLastCity' },
 	                            React.createElement(
 	                                'p',
 	                                null,
@@ -32030,17 +32030,30 @@
 	        getInitialState: function getInitialState() {
 	            return {
 	                login: null,
-	                password: null
+	                password: null,
+	                warningMessage: ''
 	            };
 	        },
 
 	        componentDidMount: function componentDidMount() {
-	            this.props.game.getGameStatus().then(function () {
-	                location.href = '#/before-start';
-	                console.log('loged in');
-	            }).fail(function () {
-	                console.log('not loged in');
-	            });
+	            if (localStorage.getItem('userLoggedIn') === 'true') {
+	                this.props.game.setLogIn().then(function () {
+	                    location.href = '#/before-start';
+	                    console.log('loged in');
+	                }).fail(function () {
+	                    console.log('not loged in');
+	                });
+	            }
+	            /*
+	                        this.props.game.getGameStatus()
+	                            .then(function(){
+	                                location.href = '#/before-start';
+	                                console.log('loged in');
+	                            })
+	                            .fail(function(){
+	                                console.log('not loged in');
+	                            });
+	            */
 	        },
 
 	        onInputChange: function onInputChange(target, event) {
@@ -32053,6 +32066,8 @@
 	            var user = this.state.login;
 	            var password = this.state.password;
 
+	            var warningMessage = '';
+
 	            /*
 	                        var user = 'user2';
 	                        var password = 'password1';
@@ -32063,9 +32078,14 @@
 	                    location.href = '#/before-start';
 	                    console.log('ok');
 	                }).fail(function () {
+	                    warningMessage = 'незарегистрированный пользователь';
 	                    console.log('not ok');
+	                    console.log(warningMessage);
 	                });
 	            }
+	            this.setState({
+	                warningMessage: warningMessage
+	            });
 	        },
 
 	        render: function render() {
@@ -32101,6 +32121,11 @@
 	                            'div',
 	                            null,
 	                            React.createElement('input', { type: 'password', className: 'login_input_style', placeholder: '\u041F\u0430\u0440\u043E\u043B\u044C', onChange: this.onInputChange.bind(this, 'password') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'warning-message' },
+	                            this.state.warningMessage
 	                        ),
 	                        React.createElement(
 	                            'div',
@@ -32267,7 +32292,6 @@
 	            this.setState({
 	                warningMessage: ''
 	            });
-	            console.log(this.state.city);
 	            console.log(this.props.game.gameId);
 	            Superagent.post(Settings.host + Settings.api + '/game/move').type('form').set('Accept', 'application/json').send({
 	                game_id: this.props.game.gameId,
@@ -32332,11 +32356,13 @@
 	                        state.disabled = true;
 	                        state.showTimer = 0;
 	                        state.city = '';
+	                        _this.props.game.changeGameWasStarted(false);
 	                        break;
 	                    case 21:
 	                        winnerMessage = 'Вы проиграли. Попробуйте еще раз.';
 	                        state.disabled = true;
 	                        state.showTimer = 0;
+	                        _this.props.game.changeGameWasStarted(false);
 	                        break;
 	                    default:
 	                        winnerMessage = '';
@@ -32700,6 +32726,17 @@
 	                        null,
 	                        this.state.cityInfo.name
 	                    ),
+	                    React.createElement('img', { src: this.state.cityInfo.arms, alt: this.state.cityInfo.name }),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            '\u0413\u043E\u0434 \u043E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u044F: '
+	                        ),
+	                        this.state.cityInfo.establishment
+	                    ),
 	                    React.createElement(
 	                        'p',
 	                        null,
@@ -32849,8 +32886,7 @@
 	            if (!error || response.body.length > 0) {
 	                _this.gameId = JSON.parse(response.text).id;
 	                console.log(_this.gameId);
-
-	                // Tell all listeners that game id changed
+	                // Tell all listeners that game id is changed
 	                _this.triggerChangeGameId();
 
 	                defer.resolve();
@@ -32866,8 +32902,12 @@
 
 	        var defer = Q.defer();
 
-	        Superagent.get(Settings.host + Settings.api + '/user/hello').set('Accept', 'application/json').auth(user, password, { type: 'auto' }).end(function (error, response) /* arrow function */{
-	            if (!error || response.body.length > 0) {
+	        Superagent.get(Settings.host + Settings.api + '/login').set('Accept', 'application/json').auth(user, password, { type: 'auto' }).end(function (error, response) /* arrow function */{
+	            if (response.body.result === true) {
+	                //set Cookies
+	                localStorage.setItem('userLoggedIn', 'true');
+	                console.log('userLoggedIn', localStorage.getItem('userLoggedIn'));
+
 	                _this2.loggedIn = true;
 	                defer.resolve();
 	            } else {
@@ -32921,12 +32961,38 @@
 	        });
 	    };
 
+	    Game.prototype.setLogIn = function () {
+	        var defer = Q.defer();
+	        this.loggedIn = true;
+	        defer.resolve();
+	        return defer.promise;
+	    };
+
 	    Game.prototype.changeGameWasStarted = function (value) {
 	        this.gameWasStarted = value;
 	    };
 
 	    Game.prototype.logOut = function () {
-	        this.loggedIn = false;
+	        var _this5 = this;
+
+	        var defer = Q.defer();
+
+	        Superagent.get(Settings.host + Settings.api + '/logout').set('Accept', 'application/json').end(function (error, response) /* arrow function */{
+	            if (!error) {
+	                _this5.loggedIn = false;
+	                console.log(response);
+	                //set Cookies
+	                localStorage.setItem('userLoggedIn', 'false');
+	                console.log('userLoggedIn', localStorage.getItem('userLoggedIn'));
+	                location.href = '#/login';
+	                defer.resolve();
+	            } else {
+	                _this5.loggedIn = true;
+	                defer.reject();
+	            }
+	        });
+
+	        return defer.promise;
 	    };
 
 	    Game.prototype.isLoggedIn = function () {
@@ -32952,14 +33018,14 @@
 	    };
 
 	    Game.prototype.triggerChangeGameId = function () {
-	        var _this5 = this;
+	        var _this6 = this;
 
 	        if (!this.callbacks) {
 	            return;
 	        }
 
 	        this.callbacks.forEach(function (callback) {
-	            callback(_this5.gameId);
+	            callback(_this6.gameId);
 	        });
 	    };
 
@@ -33116,6 +33182,32 @@
 	                        null,
 	                        React.createElement('input', { type: 'submit', className: 'register_submit', onClick: this.onButtonClick, value: '\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F' })
 	                    )
+	                )
+	            );
+	        }
+	    });
+	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React) {
+
+	    return React.createClass({
+
+	        displayName: 'Page404',
+
+	        render: function render() {
+	            return React.createElement(
+	                'div',
+	                { className: 'page404' },
+	                React.createElement(
+	                    'h1',
+	                    null,
+	                    '\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430'
 	                )
 	            );
 	        }

@@ -11,6 +11,7 @@
 @import url("./components/register.css");
 @import url("./components/timer.css");
 @import url("./components/popup.css");
+@import url("./components/page404.css");
 
 div {
     box-sizing: border-box;
@@ -45,3 +46,4 @@ div {
 .text-control-color:hover {
     color: #f6ed60;
 }
+

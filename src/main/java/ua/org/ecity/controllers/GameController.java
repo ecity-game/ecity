@@ -20,6 +20,7 @@ import ua.org.ecity.services.GameStatisticService;
 import ua.org.ecity.services.UserService;
 
 @RestController
+@RequestMapping("/game")
 public class GameController {
 
     @Autowired
@@ -33,12 +34,7 @@ public class GameController {
 
     private SessionFactory sessionFactory;
 
-    @RequestMapping("/login")
-    public Result login() {
-        return new Result(true);
-    }
-
-    @RequestMapping("/game/status")
+    @RequestMapping("/status")
     public GameInfo gameStatus(@AuthenticationPrincipal final UserDetails user) {
         String userName = user.getUsername();
         //System.out.println("userName = " + userName);
@@ -51,7 +47,7 @@ public class GameController {
         }
     }
 
-    @RequestMapping("/game/new")
+    @RequestMapping("/new")
     public String createNewGame(@AuthenticationPrincipal final UserDetails user) {
 
         String userName = user.getUsername();
@@ -66,12 +62,12 @@ public class GameController {
         //return "{\"id\":" + "111" + "}";
     }
 
-    @RequestMapping(value = "/game/move", method = RequestMethod.POST)
+    @RequestMapping(value = "/move", method = RequestMethod.POST)
     public MoveResult move(@RequestParam("game_id") int gameId, @RequestParam("city_name") String cityName) {
         return gameStatisticService.step(gameService.getGame(gameId), cityService.getCity(cityName));
     }
 
-    @RequestMapping("/game/over/giveup")
+    @RequestMapping("/over/giveup")
     public MoveResult giveup(@RequestParam("game_id") int gameId) {
         return gameStatisticService.giveUp(gameService.getGame(gameId));
     }

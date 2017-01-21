@@ -15,16 +15,23 @@
     text-align: center;
 }
 
+
 .city-list ul li {
     list-style: none;
     margin-left: -35px;
     margin-right: 5px;
     text-align: left;
-    color: #07588a;
     font-family: Roboto, sans-serif;
     font-size: 24px;
-    font-weight: 100;
     line-height: 20px;
+}
+.highlightLastCity {
+    color: orange;
+    font-weight: 600;
+}
+.noHighlightLastCity {
+    color: #07588a;
+    font-weight: 100;
 }
 .city-list ul li p {
     padding-left: 16px;
