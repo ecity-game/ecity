@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.org.ecity.entities.Game;
 import ua.org.ecity.repository.GameRepository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -32,6 +33,8 @@ public class GameService {
         game.setFirstPlayer(playerId);
         game.setPlayer2(2);
         gameRepository.save(game);
+        //game.setFirst(Instant.now());
+        //game.setSecond(Instant.now());
         return game.getId();
     }
 

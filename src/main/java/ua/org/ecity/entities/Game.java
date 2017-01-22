@@ -1,6 +1,9 @@
 package ua.org.ecity.entities;
 
+import org.hibernate.annotations.Immutable;
+
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "games")
@@ -16,6 +19,12 @@ public class Game {
     private int first_player;
     private int start;
     private int end;
+
+
+    public Game() {
+
+    }
+
 
     public int getId() {
         return id;

@@ -23,8 +23,9 @@ public class GameStatisticService {
     @Autowired
     private GameRepository gameRepository;
 
-    private Instant first = Instant.now();
-    private Instant second = Instant.now();
+    private Duration duration;
+
+
 
     public List<GameStatistic> getGameStatisticsByGame(Game game) {
         return gameStatisticRepository.getGameStatisticByGame(game);
@@ -105,15 +106,14 @@ public class GameStatisticService {
             return new MoveResult(GameStatus.CITY_USE, null, null);
         }
 
-        second = Instant.now();
-        Duration duration = Duration.between(first, second);
-        if (duration.getSeconds() > 60) {
-            System.out.println("Time: " + duration.getSeconds());
-            first = Instant.now();
-            second = Instant.now();
-            return timeUp(game);
-        }
-        first = Instant.now();
+
+//        duration = Duration.between(game.getFirst(), game.getSecond());
+//        //if (duration.getSeconds() >= 61) {
+//        if (Duration.between(game.getFirst(), game.getSecond()).getSeconds() >= 61) {
+//            System.out.println("Time: " + duration.getSeconds());
+//            return timeUp(game);
+//        }
+//        game.setFirst(Instant.now());
 
         this.addGameStatistic(game, clientCity);
         usedCities.add(clientCity);
