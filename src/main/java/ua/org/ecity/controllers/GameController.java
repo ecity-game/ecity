@@ -72,7 +72,7 @@ public class GameController {
         return gameStatisticService.giveUp(gameService.getGame(gameId));
     }
 
-    @RequestMapping("/game/over/timeup")
+    @RequestMapping("/over/timeup")
     public MoveResult timeUp(@RequestParam("game_id") int gameId) {
         return gameStatisticService.timeUp(gameService.getGame(gameId));
     }
