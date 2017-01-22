@@ -39,6 +39,14 @@
 	transition: all .5s ease-in-out;
 }
 
+.cityOnAMap {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background-color: orange;
+    border-radius: 40px;
+}
+
 /*
 @media screen and (max-width: 1300px) {
     .map {
