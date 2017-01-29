@@ -33,11 +33,11 @@
     color: #07588a;
     font-weight: 100;
 }
-.city-list ul li p {
+.city-list ul li .city_list_name {
     padding-left: 16px;
     font-size: 18px;
 }
-.city-list ul li p:hover {
+.city-list ul li .city_list_name:hover {
     text-decoration: underline;
     cursor: pointer;
 }
@@ -51,14 +51,23 @@
 }
 
 .city-list ul li div {
+    padding: 10px;
     border: 1px solid grey;
     word-wrap: break-word;
     animation-name: information;
     animation-duration: 5s;
     overflow: hidden;
+}
+.city-list ul li div p, .wiki-link-list{
+    text-align: left;
     color: #07588a;
     font-family: Roboto, sans-serif;
     font-size: 14px;
     font-weight: 100;
     line-height: 22px;
+}
+.city-list ul li div img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
