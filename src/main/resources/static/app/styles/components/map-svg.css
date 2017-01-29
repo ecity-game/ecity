@@ -39,14 +39,28 @@
 	transition: all .5s ease-in-out;
 }
 
-.cityOnAMap {
+.displayCityPosition {
     width: 10px;
     height: 10px;
     position: absolute;
     background-color: orange;
     border-radius: 40px;
 }
+.map-inner-box {
+    position: absolute;
+    top: 8.5%;
+    left: 2.3%;
+    right: 2.3%;
+    bottom: 6.5%;
+/*     border: 1px solid red; */
+}
 
+.displayCityName {
+    position: absolute;
+    font-family: Roboto, sans-serif;
+    font-weight: 800;
+    color: red;
+}
 /*
 @media screen and (max-width: 1300px) {
     .map {
