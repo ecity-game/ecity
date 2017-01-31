@@ -23,14 +23,13 @@ public class City {
     private static List<Character> EXCEPTIONAL_CHARACTERS = Arrays.asList('Й', 'Ы', 'Ь', 'Ъ', 'Ц');
 
     @Transient
-    private static double NORTH = 52.33444;
+    private static double NORTH = 52.376011; //52.33444;
     @Transient
-    private static double SOUTH = 44.38722;
+    private static double SOUTH = 44.386354; //44.38722;
     @Transient
-    private static double WEST = 22.43056;
+    private static double WEST = 22.137749; //22.43056;
     @Transient
-    private static double EAST = 40.19806;
-
+    private static double EAST = 40.228509; //40.19806;
     @Transient
     private static double HEIGHT = NORTH - SOUTH; //7.94722;
     @Transient
