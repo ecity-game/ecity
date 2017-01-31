@@ -10,12 +10,15 @@
 .city_info {
     border: 1px solid black;
 }
-.city-library .city_info {
+.city-library .city_info, .wiki-link-library {
     position: relative;
     margin-top: 20px;
     padding: 0 10px 10px 10px;
     font-family: Roboto, sans-serif;
     color: #07588a;
+}
+.wiki-link-library {
+    padding-left: 0;
 }
 .city-library .city_info img {
     display: block;
@@ -48,7 +51,6 @@
     text-align: center;
     list-style: none;
     font-family: Roboto, sans-serif;
-    color: #07588a;
     font-size: 17px;
     font-weight: 700;
     line-height: 20px;
@@ -61,7 +63,13 @@
 .city-library .table-cities li:hover {
     color: #fead00;
     cursor: pointer;
-    text-decoration: underline;
+}
+
+.marked {
+    color: orange;
+}
+.not-marked {
+    color: #07588a;
 }
 @media screen and (max-width: 1350px){
     .city-library .letters > li {
