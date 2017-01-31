@@ -50,9 +50,9 @@ public class GameStatisticServiceTest {
 
         cities.add(city);
         when(cityService.getCitiesByFirstLetter(currentCity.getLastChar())).thenReturn(cities);
-        assertThat(gameStatisticService.getServerMove(currentCity, usedCities), is(city));
+        assertThat(gameStatisticService.getNextMove(currentCity, usedCities), is(city));
 
         usedCities.add(city);
-        assertThat(gameStatisticService.getServerMove(currentCity, usedCities), is(nullValue()));
+        assertThat(gameStatisticService.getNextMove(currentCity, usedCities), is(nullValue()));
     }
 }

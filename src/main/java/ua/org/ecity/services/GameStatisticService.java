@@ -1,16 +1,18 @@
 package ua.org.ecity.services;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.org.ecity.entities.*;
+import ua.org.ecity.entities.City;
+import ua.org.ecity.entities.Game;
+import ua.org.ecity.entities.GameStatistic;
+import ua.org.ecity.entities.GameStatus;
+import ua.org.ecity.entities.MoveResult;
 import ua.org.ecity.repository.GameRepository;
 import ua.org.ecity.repository.GameStatisticRepository;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GameStatisticService {
@@ -93,8 +95,11 @@ public class GameStatisticService {
 
         City clientCity = clientCities.get(0);
 
-        List<City> usedCities = this.
-                getGameStatisticsByGame(game).stream().map(GameStatistic::getCity).collect(Collectors.toList());
+        List<City> usedCities = this
+            .getGameStatisticsByGame(game)
+            .stream()
+            .map(GameStatistic::getCity)
+            .collect(Collectors.toList());
 
         if (usedCities.size() != 0) {
             if (clientCity.getName().charAt(0) != usedCities.get(usedCities.size() - 1).getLastChar()) {
@@ -118,7 +123,7 @@ public class GameStatisticService {
         this.addGameStatistic(game, clientCity);
         usedCities.add(clientCity);
 
-        City serverCity = this.getServerMove(clientCity, usedCities);
+        City serverCity = this.getNextMove(clientCity, usedCities);
 
         if (serverCity == null) {
             finish(game);
@@ -126,10 +131,17 @@ public class GameStatisticService {
         }
 
         this.addGameStatistic(game, serverCity);
+        usedCities.add(serverCity);
+
+        if (this.getNextMove(serverCity, usedCities) == null) {
+            finish(game);
+            return new MoveResult(GameStatus.WINNER_PLAYER_2, serverCity, clientCity);
+        }
+
         return new MoveResult(GameStatus.EXISTS, serverCity, clientCity);
     }
 
-    City getServerMove(City currentCity, List<City> usedCities) {
+    City getNextMove(City currentCity, List<City> usedCities) {
         List<City> cities = cityService.getCitiesByFirstLetter(currentCity.getLastChar());
         cities.removeAll(usedCities);
         return (cities.size() != 0) ? cities.get((int) (Math.random() * cities.size())) : null;
