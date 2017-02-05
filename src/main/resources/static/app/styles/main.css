@@ -12,6 +12,7 @@
 @import url("./components/timer.css");
 @import url("./components/popup.css");
 @import url("./components/page404.css");
+@import url("./components/records-table.css");
 
 div {
     box-sizing: border-box;

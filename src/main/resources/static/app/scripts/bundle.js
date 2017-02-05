@@ -56,7 +56,7 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(35), __webpack_require__(197), __webpack_require__(252), __webpack_require__(255), __webpack_require__(256), __webpack_require__(2), __webpack_require__(261), __webpack_require__(263), __webpack_require__(264), __webpack_require__(265), __webpack_require__(266)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, ReactDom, ReactRouter, Q, Login, Ecity, Rules, Library, BeforeStart, Game, Register, Page404) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(35), __webpack_require__(197), __webpack_require__(252), __webpack_require__(255), __webpack_require__(256), __webpack_require__(261), __webpack_require__(2), __webpack_require__(263), __webpack_require__(264), __webpack_require__(265), __webpack_require__(266), __webpack_require__(267)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, ReactDom, ReactRouter, Q, Login, Ecity, Rules, Library, BeforeStart, Game, Register, Page404, Records) {
 
 	    var Router = ReactRouter.Router;
 	    var Route = ReactRouter.Route;
@@ -105,6 +105,7 @@
 	                React.createElement(Route, { path: '/library', getComponent: getComponent(Library), onEnter: requireLogIn }),
 	                React.createElement(Route, { path: '/before-start', getComponent: getComponent(BeforeStart), onEnter: requireLogIn }),
 	                React.createElement(Route, { path: '/register', getComponent: getComponent(Register) }),
+	                React.createElement(Route, { path: '/records', getComponent: getComponent(Records), onEnter: requireLogIn }),
 	                React.createElement(Route, { path: '*', getComponent: getComponent(Page404) })
 	            );
 	        }
@@ -121,18 +122,18 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(34), __webpack_require__(195), __webpack_require__(196)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, SideBar, GameRules, CityList) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(34), __webpack_require__(195), __webpack_require__(196)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, SideBar, CityLibrary, CityList) {
 
 	    return React.createClass({
 
-	        displayName: 'Rules',
+	        displayName: 'Library',
 
 	        render: function render() {
 	            return React.createElement(
 	                'div',
 	                null,
 	                React.createElement(SideBar, { game: this.props.game }),
-	                React.createElement(GameRules, null),
+	                React.createElement(CityLibrary, { game: this.props.game }),
 	                React.createElement(CityList, null)
 	            );
 	        }
@@ -4225,14 +4226,20 @@
 	        }
 	    },
 
-	    onButtonClick: function onButtonClick(event) {
+	    onButtonClick: function onButtonClick(message, page, event) {
 	        var _this = this;
 
 	        event.preventDefault();
 
+	        var getNewGameId = function getNewGameId() {
+	            _this.props.game.getGameId().then(function () {
+	                location.href = page;
+	            });
+	        };
+
 	        if (this.props.game.gameWasStarted === true) {
 	            Popup.create({
-	                content: 'Ваша игра еще не закончена. Вы уверены, что хотите начать новую игру?',
+	                content: message,
 	                buttons: {
 	                    left: [{
 	                        text: 'нет',
@@ -4243,60 +4250,36 @@
 	                    right: [{
 	                        text: 'да',
 	                        action: function action(popup) {
-	                            _this.props.game.getGameId().then(function () {
-	                                location.href = "#/e-city";
-	                            });
+	                            if (page === "#/e-city") {
+	                                getNewGameId();
+	                                _this.props.game.onChangeGameId();
+	                            } else {
+	                                location.href = page;
+	                            }
 	                            _this.props.game.changeGameWasStarted(false);
 	                            popup.close();
 	                        }
 	                    }]
 	                }
 	            });
+	        } else if (page === "#/e-city") {
+	            getNewGameId();
+	            this.props.game.changeGameWasStarted(false);
 	        } else {
-	            this.props.game.getGameId().then(function () {
-	                location.href = "#/e-city";
-	            });
+	            location.href = page;
 	            this.props.game.changeGameWasStarted(false);
 	        }
 	    },
 
-	    onLibraryClick: function onLibraryClick(event) {
-	        var _this2 = this;
-
-	        event.preventDefault();
-
-	        if (this.props.game.gameWasStarted === true) {
-	            Popup.create({
-	                content: 'При переходе в библиотеку Ваша игра будет закончена. Вы уверены, что хотите закончить игру?',
-	                buttons: {
-	                    left: [{
-	                        text: 'нет',
-	                        action: function action(popup) {
-	                            popup.close();
-	                        }
-	                    }],
-	                    right: [{
-	                        text: 'да',
-	                        action: function action(popup) {
-	                            _this2.props.game.getGameId().then(function () {
-	                                location.href = "#/library";
-	                                _this2.props.game.giveUp();
-	                            });
-	                            _this2.props.game.changeGameWasStarted(false);
-	                            popup.close();
-	                        }
-	                    }]
-	                }
-	            });
-	        } else {
-	            this.props.game.getGameId().then(function () {
-	                location.href = "#/library";
-	            });
-	            this.props.game.changeGameWasStarted(false);
-	        }
+	    continueClick: function continueClick(event) {
+	        this.props.game.changeGameWasStarted(true);
 	    },
 
 	    render: function render() {
+
+	        var popupMessageNewGame = 'Ваша игра еще не закончена. Вы уверены, что хотите начать новую игру?';
+	        var popupMessageOthers = 'При переходе на другую страницу Ваша игра будет закончена. Вы уверены, что хотите закончить игру?';
+
 	        return React.createElement(
 	            'div',
 	            { className: 'side-bar bg-color' },
@@ -4314,7 +4297,7 @@
 	                null,
 	                React.createElement(
 	                    'a',
-	                    { className: 'text-control-color', href: '#', onClick: this.onButtonClick },
+	                    { className: 'text-control-color', href: '#', onClick: this.onButtonClick.bind(this, popupMessageNewGame, "#/e-city") },
 	                    '\u041D\u043E\u0432\u0430\u044F \u0438\u0433\u0440\u0430'
 	                )
 	            ),
@@ -4323,7 +4306,7 @@
 	                null,
 	                React.createElement(
 	                    'a',
-	                    { className: 'grey-color', href: '#/e-city' },
+	                    { className: this.props.game.continueButtonPointerEvents ? 'grey-color' : 'text-control-color', href: '#/e-city', onClick: this.continueClick, style: { pointerEvents: this.props.game.continueButtonPointerEvents } },
 	                    '\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C'
 	                )
 	            ),
@@ -4332,7 +4315,7 @@
 	                null,
 	                React.createElement(
 	                    'a',
-	                    { className: 'text-control-color', href: '#' },
+	                    { className: 'text-control-color', href: '#', onClick: this.onButtonClick.bind(this, popupMessageOthers, "#/records") },
 	                    '\u0420\u0435\u043A\u043E\u0440\u0434\u044B'
 	                )
 	            ),
@@ -4341,7 +4324,7 @@
 	                null,
 	                React.createElement(
 	                    'a',
-	                    { className: 'text-control-color', href: '#/rules' },
+	                    { className: 'text-control-color', href: '#', onClick: this.onButtonClick.bind(this, popupMessageOthers, "#/rules") },
 	                    '\u041F\u0440\u0430\u0432\u0438\u043B\u0430'
 	                )
 	            ),
@@ -4350,7 +4333,7 @@
 	                null,
 	                React.createElement(
 	                    'a',
-	                    { className: 'text-control-color', href: '#', onClick: this.onLibraryClick },
+	                    { className: 'text-control-color', href: '#', onClick: this.onButtonClick.bind(this, popupMessageOthers, "#/library") },
 	                    '\u0411\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0430'
 	                )
 	            ),
@@ -24704,31 +24687,174 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(181), __webpack_require__(194)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, Superagent, Settings) {
+
+	    var alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ы', 'э', 'ю', 'я'];
 
 	    return React.createClass({
 
-	        displayName: 'GameRules',
+	        displayName: 'City-Library',
+
+	        getInitialState: function getInitialState() {
+	            return {
+	                library: [],
+	                expanded: null,
+	                letter: '',
+	                cityInfo: null,
+	                markedCity: null
+	            };
+	        },
+
+	        componentDidMount: function componentDidMount() {
+	            this.getLibrary();
+	        },
+
+	        getLibrary: function getLibrary() {
+	            var _this = this;
+
+	            Superagent.get(Settings.host + Settings.api + '/cities').set('Accept', 'application/json').end(function (error, response) {
+	                _this.setState({
+	                    library: response.body
+	                });
+	            });
+	        },
+
+	        onClickButton: function onClickButton(letter, event) {
+
+	            this.setState({
+	                expanded: this.state.expanded === letter ? null : letter,
+	                letter: letter,
+	                cityInfo: null
+	            });
+	        },
+
+	        citySort: function citySort() {
+	            var sorted = {};
+	            for (var i = 0, x = this.state.library.length; i < x; i++) {
+	                var char = this.state.library[i].name[0].toLowerCase();
+	                if (!sorted[char]) {
+	                    sorted[char] = [this.state.library[i]];
+	                } else {
+	                    sorted[char].push(this.state.library[i]);
+	                }
+	            }
+	            return sorted;
+	        },
+
+	        addCities: function addCities(obj) {
+	            var _this2 = this;
+
+	            var letter = this.state.letter;
+	            var cities = obj[letter];
+	            return this.state.expanded === letter ? React.createElement(
+	                'div',
+	                { key: letter, className: 'table-cities' },
+	                React.createElement(
+	                    'ul',
+	                    null,
+	                    cities.map(function (city, i) {
+	                        return React.createElement(
+	                            'li',
+	                            { key: city.id },
+	                            React.createElement(
+	                                'p',
+	                                { onClick: _this2.getCityInfo.bind(_this2, city.id), className: city.id === _this2.state.markedCity ? 'marked' : 'not-marked' },
+	                                city.name
+	                            )
+	                        );
+	                    })
+	                )
+	            ) : null;
+	        },
+
+	        getCityInfo: function getCityInfo(id, event) {
+	            var _this3 = this;
+
+	            if (id) {
+	                Superagent.get(Settings.host + Settings.api + '/city/' + id).set('Accept', 'application/json').end(function (error, response) {
+	                    console.log(JSON.parse(response.text));
+	                    _this3.setState({
+	                        cityInfo: JSON.parse(response.text),
+	                        markedCity: JSON.parse(response.text).id
+	                    });
+	                });
+	            }
+	        },
 
 	        render: function render() {
+	            var _this4 = this;
+
+	            var sort = this.citySort();
 	            return React.createElement(
 	                'div',
-	                { className: 'game-rules' },
+	                { className: 'city-library' },
 	                React.createElement(
-	                    'h1',
-	                    null,
-	                    '\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u0438\u0433\u0440\u044B'
+	                    'ul',
+	                    { className: 'letters' },
+	                    alphabet.map(function (letter, i) {
+	                        var cities = sort[letter];
+	                        if (cities) {
+	                            return React.createElement(
+	                                'li',
+	                                { key: i },
+	                                React.createElement(
+	                                    'h2',
+	                                    { onClick: _this4.onClickButton.bind(_this4, letter), className: letter === _this4.state.letter ? 'marked' : 'not-marked' },
+	                                    letter.toUpperCase()
+	                                )
+	                            );
+	                        }
+	                    })
 	                ),
-	                React.createElement(
-	                    'p',
-	                    null,
-	                    '\u0413\u043E\u0440\u043E\u0434\u0430 \u2014 \u0438\u0433\u0440\u0430 \u0434\u043B\u044F \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445 \u0447\u0435\u043B\u043E\u0432\u0435\u043A, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u043A\u0430\u0436\u0434\u044B\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u0432 \u0441\u0432\u043E\u044E \u043E\u0447\u0435\u0440\u0435\u0434\u044C \u043D\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0430\u043B\u044C\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0438\u0439 \u0433\u043E\u0440\u043E\u0434 \u0423\u043A\u0440\u0430\u0438\u043D\u044B, \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043A\u043E\u0442\u043E\u0440\u043E\u0433\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u043D\u0430 \u0442\u0443 \u0431\u0443\u043A\u0432\u0443, \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0433\u043E \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430.'
-	                ),
-	                React.createElement(
-	                    'p',
-	                    null,
-	                    '\u0418\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u043B\u044F\u044E\u0442 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F, \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u044E\u0449\u0438\u0435\u0441\u044F \u043D\u0430 "\u044C", "\u044A", "\u044B", "\u0439", \u0430 \u0442\u0430\u043A\u0436\u0435 \u043D\u0430 "\u0446", \u0442.\u043A. \u0433\u043E\u0440\u043E\u0434\u0430 \u0432 \u0423\u043A\u0440\u0430\u0438\u043D\u0435, \u043D\u0430\u0447\u0438\u043D\u0430\u044E\u0449\u0435\u0433\u043E\u0441\u044F \u043D\u0430 \u044D\u0442\u0443 \u0431\u0443\u043A\u0432\u0443, \u043F\u0440\u043E\u0441\u0442\u043E \u043D\u0435\u0442. \u0412 \u0442\u0430\u043A\u0438\u0445 \u0441\u043B\u0443\u0447\u0430\u044F\u0445 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u043D\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0433\u043E\u0440\u043E\u0434 \u043D\u0430 \u043F\u0440\u0435\u0434\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044E\u044E \u0431\u0443\u043A\u0432\u0443. \u041F\u0440\u0438 \u044D\u0442\u043E\u043C \u0440\u0430\u043D\u0435\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0440\u043E\u0434\u0430 \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u044E\u0442\u0441\u044F \u0432 \u043A\u043E\u043B\u043E\u043D\u043A\u0443 \u0441 \u043B\u0435\u0432\u043E\u0439 \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u044D\u043A\u0440\u0430\u043D\u0430 \u0438 \u0438\u0445 \u043D\u0435\u043B\u044C\u0437\u044F \u0443\u043F\u043E\u0442\u0440\u0435\u0431\u043B\u044F\u0442\u044C \u0441\u043D\u043E\u0432\u0430. \u041F\u0435\u0440\u0432\u044B\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442 \u043B\u044E\u0431\u043E\u0439 \u0433\u043E\u0440\u043E\u0434. \u0412\u043E \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u0437\u0430\u043F\u0440\u0435\u0449\u0430\u0435\u0442\u0441\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F \u0431\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u043E\u0439. \u0424\u043E\u0440\u043C\u0430\u043B\u044C\u043D\u043E \u0438\u0433\u0440\u0430 \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044F, \u043A\u043E\u0433\u0434\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u043D\u043E\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u043D\u0430\u0437\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u043E\u0433\u043E \u0433\u043E\u0440\u043E\u0434\u0430.'
-	                )
+	                this.addCities(sort),
+	                this.state.cityInfo ? React.createElement(
+	                    'div',
+	                    { key: this.state.cityInfo.id, className: 'city_info' },
+	                    React.createElement(
+	                        'h3',
+	                        null,
+	                        this.state.cityInfo.name
+	                    ),
+	                    this.state.cityInfo.arms ? React.createElement('img', { src: this.state.cityInfo.arms }) : null,
+	                    this.state.cityInfo.regionId ? React.createElement(
+	                        'p',
+	                        null,
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            this.props.game.getRegion(this.state.cityInfo.regionId)
+	                        )
+	                    ) : null,
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            '\u0413\u043E\u0434 \u043E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u044F: '
+	                        ),
+	                        this.state.cityInfo.establishment
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            '\u041D\u0430\u0441\u0435\u043B\u0435\u043D\u0438\u0435: '
+	                        ),
+	                        this.state.cityInfo.population
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { href: this.state.cityInfo.url, target: '_blank', className: 'wiki-link-library' },
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            '\u0411\u043E\u043B\u044C\u0448\u0435 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 \u043F\u043E \u0441\u0441\u044B\u043B\u043A\u0435'
+	                        )
+	                    )
+	                ) : null
 	            );
 	        }
 
@@ -24786,6 +24912,11 @@
 	                                'div',
 	                                null,
 	                                city.arms ? React.createElement('img', { src: city.arms }) : null,
+	                                city.regionId ? React.createElement(
+	                                    'p',
+	                                    null,
+	                                    _this.props.game.getRegion(city.regionId)
+	                                ) : null,
 	                                React.createElement(
 	                                    'p',
 	                                    null,
@@ -32048,7 +32179,7 @@
 	        },
 
 	        componentDidMount: function componentDidMount() {
-	            if (localStorage.getItem('userLoggedIn') === 'true') {
+	            if (sessionStorage.getItem('userLoggedIn') === 'true') {
 	                this.props.game.setLogIn().then(function () {
 	                    location.href = '#/before-start';
 	                    console.log('loged in');
@@ -32056,16 +32187,6 @@
 	                    console.log('not loged in');
 	                });
 	            }
-	            /*
-	                        this.props.game.getGameStatus()
-	                            .then(function(){
-	                                location.href = '#/before-start';
-	                                console.log('loged in');
-	                            })
-	                            .fail(function(){
-	                                console.log('not loged in');
-	                            });
-	            */
 	        },
 
 	        onInputChange: function onInputChange(target, event) {
@@ -32208,6 +32329,17 @@
 	            };
 	        },
 
+	        componentWillMount: function componentWillMount() {
+	            if (this.props.game.gameHistory) {
+
+	                this.setState({
+	                    cities: this.props.game.gameHistory.map(function (historyItem) {
+	                        return historyItem.city;
+	                    }).reverse()
+	                });
+	            }
+	        },
+
 	        componentDidMount: function componentDidMount() {
 	            this.props.game.onChangeGameId(this.onChangeGameId);
 	        },
@@ -32234,7 +32366,7 @@
 	                null,
 	                React.createElement(SideBar, { game: this.props.game }),
 	                React.createElement(PlayGame, { onAddCity: this.onAddCity, game: this.props.game }),
-	                React.createElement(CityList, { cities: this.state.cities })
+	                React.createElement(CityList, { cities: this.state.cities, game: this.props.game })
 	            );
 	        }
 	    });
@@ -32254,18 +32386,26 @@
 
 	        getInitialState: function getInitialState() {
 	            return {
-	                city: '',
+	                city: this.props.game.lastLetterGameHistory,
 	                inputLetter: '',
 	                warningMessage: '',
 	                winnerMessage: '',
-	                regionId: null,
+	                regionId: this.props.game.regionId,
 	                regionClientId: null,
 	                disabled: false,
 	                showTimer: 0,
-	                topPosition: null,
-	                leftPosition: null,
-	                cityName: ''
+	                topPosition: this.props.game.topPosition,
+	                leftPosition: this.props.game.leftPosition,
+	                cityName: this.props.game.cityName
 	            };
+	        },
+
+	        componentWillMount: function componentWillMount() {
+	            if (this.state.city) {
+	                this.setState({
+	                    showTimer: 1
+	                });
+	            }
 	        },
 
 	        componentDidMount: function componentDidMount() {
@@ -32316,7 +32456,6 @@
 	            this.setState({
 	                warningMessage: ''
 	            });
-	            console.log(this.props.game.gameId);
 	            Superagent.post(Settings.host + Settings.api + '/game/move').type('form').set('Accept', 'application/json').send({
 	                game_id: this.props.game.gameId,
 	                city_name: this.state.city
@@ -32592,18 +32731,18 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(34), __webpack_require__(262), __webpack_require__(196)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, SideBar, CityLibrary, CityList) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(34), __webpack_require__(262), __webpack_require__(196)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, SideBar, GameRules, CityList) {
 
 	    return React.createClass({
 
-	        displayName: 'Library',
+	        displayName: 'Rules',
 
 	        render: function render() {
 	            return React.createElement(
 	                'div',
 	                null,
 	                React.createElement(SideBar, { game: this.props.game }),
-	                React.createElement(CityLibrary, null),
+	                React.createElement(GameRules, null),
 	                React.createElement(CityList, null)
 	            );
 	        }
@@ -32616,165 +32755,31 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(181), __webpack_require__(194)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, Superagent, Settings) {
-
-	    var alphabet = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ы', 'э', 'ю', 'я'];
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React) {
 
 	    return React.createClass({
 
-	        displayName: 'City-Library',
-
-	        getInitialState: function getInitialState() {
-	            return {
-	                library: [],
-	                expanded: null,
-	                letter: '',
-	                cityInfo: null,
-	                markedCity: null
-	            };
-	        },
-
-	        componentDidMount: function componentDidMount() {
-	            this.getLibrary();
-	        },
-
-	        getLibrary: function getLibrary() {
-	            var _this = this;
-
-	            Superagent.get(Settings.host + Settings.api + '/cities').set('Accept', 'application/json').end(function (error, response) {
-	                _this.setState({
-	                    library: response.body
-	                });
-	            });
-	        },
-
-	        onClickButton: function onClickButton(letter, event) {
-
-	            this.setState({
-	                expanded: this.state.expanded === letter ? null : letter,
-	                letter: letter,
-	                cityInfo: null
-	            });
-	        },
-
-	        citySort: function citySort() {
-	            var sorted = {};
-	            for (var i = 0, x = this.state.library.length; i < x; i++) {
-	                var char = this.state.library[i].name[0].toLowerCase();
-	                if (!sorted[char]) {
-	                    sorted[char] = [this.state.library[i]];
-	                } else {
-	                    sorted[char].push(this.state.library[i]);
-	                }
-	            }
-	            return sorted;
-	        },
-
-	        addCities: function addCities(obj) {
-	            var _this2 = this;
-
-	            var letter = this.state.letter;
-	            var cities = obj[letter];
-	            return this.state.expanded === letter ? React.createElement(
-	                'div',
-	                { key: letter, className: 'table-cities' },
-	                React.createElement(
-	                    'ul',
-	                    null,
-	                    cities.map(function (city, i) {
-	                        return React.createElement(
-	                            'li',
-	                            { key: city.id },
-	                            React.createElement(
-	                                'p',
-	                                { onClick: _this2.getCityInfo.bind(_this2, city.id), className: city.id === _this2.state.markedCity ? 'marked' : 'not-marked' },
-	                                city.name
-	                            )
-	                        );
-	                    })
-	                )
-	            ) : null;
-	        },
-
-	        getCityInfo: function getCityInfo(id, event) {
-	            var _this3 = this;
-
-	            if (id) {
-	                Superagent.get(Settings.host + Settings.api + '/city/' + id).set('Accept', 'application/json').end(function (error, response) {
-	                    console.log(JSON.parse(response.text));
-	                    _this3.setState({
-	                        cityInfo: JSON.parse(response.text),
-	                        markedCity: JSON.parse(response.text).id
-	                    });
-	                });
-	            }
-	        },
+	        displayName: 'GameRules',
 
 	        render: function render() {
-	            var _this4 = this;
-
-	            var sort = this.citySort();
 	            return React.createElement(
 	                'div',
-	                { className: 'city-library' },
+	                { className: 'game-rules' },
 	                React.createElement(
-	                    'ul',
-	                    { className: 'letters' },
-	                    alphabet.map(function (letter, i) {
-	                        var cities = sort[letter];
-	                        if (cities) {
-	                            return React.createElement(
-	                                'li',
-	                                { key: i },
-	                                React.createElement(
-	                                    'h2',
-	                                    { onClick: _this4.onClickButton.bind(_this4, letter), className: letter === _this4.state.letter ? 'marked' : 'not-marked' },
-	                                    letter.toUpperCase()
-	                                )
-	                            );
-	                        }
-	                    })
+	                    'h1',
+	                    null,
+	                    '\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u0438\u0433\u0440\u044B'
 	                ),
-	                this.addCities(sort),
-	                this.state.cityInfo ? React.createElement(
-	                    'div',
-	                    { key: this.state.cityInfo.id, className: 'city_info' },
-	                    React.createElement(
-	                        'h3',
-	                        null,
-	                        this.state.cityInfo.name
-	                    ),
-	                    this.state.cityInfo.arms ? React.createElement('img', { src: this.state.cityInfo.arms }) : null,
-	                    React.createElement(
-	                        'p',
-	                        null,
-	                        React.createElement(
-	                            'strong',
-	                            null,
-	                            '\u0413\u043E\u0434 \u043E\u0441\u043D\u043E\u0432\u0430\u043D\u0438\u044F: '
-	                        ),
-	                        this.state.cityInfo.establishment
-	                    ),
-	                    React.createElement(
-	                        'p',
-	                        null,
-	                        React.createElement(
-	                            'strong',
-	                            null,
-	                            '\u041D\u0430\u0441\u0435\u043B\u0435\u043D\u0438\u0435: '
-	                        ),
-	                        this.state.cityInfo.population
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { href: this.state.cityInfo.url, target: '_blank', className: 'wiki-link-library' },
-	                        React.createElement(
-	                            'strong',
-	                            null,
-	                            '\u0411\u043E\u043B\u044C\u0448\u0435 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0438 \u043F\u043E \u0441\u0441\u044B\u043B\u043A\u0435'
-	                        )
-	                    )
-	                ) : null
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    '\u0413\u043E\u0440\u043E\u0434\u0430 \u2014 \u0438\u0433\u0440\u0430 \u0434\u043B\u044F \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445 \u0447\u0435\u043B\u043E\u0432\u0435\u043A, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u043A\u0430\u0436\u0434\u044B\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u0432 \u0441\u0432\u043E\u044E \u043E\u0447\u0435\u0440\u0435\u0434\u044C \u043D\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0440\u0435\u0430\u043B\u044C\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044E\u0449\u0438\u0439 \u0433\u043E\u0440\u043E\u0434 \u0423\u043A\u0440\u0430\u0438\u043D\u044B, \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043A\u043E\u0442\u043E\u0440\u043E\u0433\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u043D\u0430 \u0442\u0443 \u0431\u0443\u043A\u0432\u0443, \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0433\u043E \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430.'
+	                ),
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    '\u0418\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u043B\u044F\u044E\u0442 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044F, \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u044E\u0449\u0438\u0435\u0441\u044F \u043D\u0430 "\u044C", "\u044A", "\u044B", "\u0439", \u0430 \u0442\u0430\u043A\u0436\u0435 \u043D\u0430 "\u0446", \u0442.\u043A. \u0433\u043E\u0440\u043E\u0434\u0430 \u0432 \u0423\u043A\u0440\u0430\u0438\u043D\u0435, \u043D\u0430\u0447\u0438\u043D\u0430\u044E\u0449\u0435\u0433\u043E\u0441\u044F \u043D\u0430 \u044D\u0442\u0443 \u0431\u0443\u043A\u0432\u0443, \u043F\u0440\u043E\u0441\u0442\u043E \u043D\u0435\u0442. \u0412 \u0442\u0430\u043A\u0438\u0445 \u0441\u043B\u0443\u0447\u0430\u044F\u0445 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u043D\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0433\u043E\u0440\u043E\u0434 \u043D\u0430 \u043F\u0440\u0435\u0434\u043F\u043E\u0441\u043B\u0435\u0434\u043D\u044E\u044E \u0431\u0443\u043A\u0432\u0443. \u041F\u0440\u0438 \u044D\u0442\u043E\u043C \u0440\u0430\u043D\u0435\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u043D\u044B\u0435 \u0433\u043E\u0440\u043E\u0434\u0430 \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u044E\u0442\u0441\u044F \u0432 \u043A\u043E\u043B\u043E\u043D\u043A\u0443 \u0441 \u043B\u0435\u0432\u043E\u0439 \u0441\u0442\u043E\u0440\u043E\u043D\u044B \u044D\u043A\u0440\u0430\u043D\u0430 \u0438 \u0438\u0445 \u043D\u0435\u043B\u044C\u0437\u044F \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0441\u043D\u043E\u0432\u0430. \u041F\u0435\u0440\u0432\u044B\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442 \u043B\u044E\u0431\u043E\u0439 \u0433\u043E\u0440\u043E\u0434. \u0412\u043E \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u0437\u0430\u043F\u0440\u0435\u0449\u0430\u0435\u0442\u0441\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F \u0431\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u043E\u0439. \u0418\u0433\u0440\u0430 \u043E\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044F, \u043A\u043E\u0433\u0434\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u043D\u043E\u0439 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A \u043D\u0435 \u043C\u043E\u0436\u0435\u0442 \u043D\u0430\u0437\u0432\u0430\u0442\u044C \u043D\u043E\u0432\u043E\u0433\u043E \u0433\u043E\u0440\u043E\u0434\u0430 \u043B\u0438\u0431\u043E \u0435\u0441\u043B\u0438 \u0432\u0441\u0435 \u0433\u043E\u0440\u043E\u0434\u0430 \u043D\u0430 \u044D\u0442\u0443 \u0431\u0443\u043A\u0432\u0443 \u0443\u0436\u0435 \u0431\u044B\u043B\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u044B.'
+	                )
 	            );
 	        }
 
@@ -32793,8 +32798,35 @@
 
 	        displayName: 'BeforeStart',
 
+	        getInitialState: function getInitialState() {
+	            return {
+	                pointerEvents: this.props.game.continueButtonPointerEvents
+	            };
+	        },
+
+	        componentWillMount: function componentWillMount() {
+	            var _this = this;
+
+	            this.props.game.getGameStatus().then(function (response) {
+	                if (response.id) {
+	                    _this.setState({
+	                        pointerEvents: ''
+	                    });
+	                    _this.props.game.getGameHistory();
+	                }
+	            }).fail(function (error) {
+	                console.log(error);
+	                sessionStorage.setItem('userLoggedIn', 'false');
+	                location.href = '#/login';
+	            });
+	        },
+
 	        onButtonClick: function onButtonClick(event) {
 	            this.props.game.getGameId().then(function () {});
+	        },
+
+	        continueClick: function continueClick(event) {
+	            this.props.game.changeGameWasStarted(true);
 	        },
 
 	        onLogOut: function onLogOut() {
@@ -32836,8 +32868,17 @@
 	                        null,
 	                        React.createElement(
 	                            'a',
-	                            { href: '#/e-city', className: 'grey-color' },
+	                            { href: '#/e-city', className: this.state.pointerEvents ? 'grey-color' : 'text-control-color', style: { pointerEvents: this.state.pointerEvents }, onClick: this.continueClick },
 	                            '\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C'
+	                        )
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        null,
+	                        React.createElement(
+	                            'a',
+	                            { className: 'text-control-color', href: '#/records' },
+	                            '\u0420\u0435\u043A\u043E\u0440\u0434\u044B'
 	                        )
 	                    ),
 	                    React.createElement(
@@ -32888,6 +32929,13 @@
 	        this.gameStatus = false;
 	        this.gameWasStarted = false;
 	        this.giveUpCode = 0;
+	        this.continueButtonPointerEvents = 'none';
+	        this.gameHistory = [];
+	        this.lastLetterGameHistory = '';
+	        this.regionId = null;
+	        this.topPosition = null;
+	        this.leftPosition = null;
+	        this.cityName = '';
 	    };
 
 	    Game.prototype.getGameId = function () {
@@ -32898,7 +32946,15 @@
 	        Superagent.get(Settings.host + Settings.api + '/game/new').set('Accept', 'application/json').end(function (error, response) /* arrow function */{
 	            if (!error || response.body.length > 0) {
 	                _this.gameId = JSON.parse(response.text).id;
-	                console.log(_this.gameId);
+
+	                _this.gameHistory = [];
+	                _this.lastLetterGameHistory = '';
+	                _this.regionId = null;
+	                _this.topPosition = null;
+	                _this.leftPosition = null;
+	                _this.cityName = '';
+	                _this.continueButtonPointerEvents = 'none';
+
 	                // Tell all listeners that game id is changed
 	                _this.triggerChangeGameId();
 
@@ -32918,7 +32974,7 @@
 	        Superagent.get(Settings.host + Settings.api + '/login').set('Accept', 'application/json').auth(user, password, { type: 'auto' }).end(function (error, response) /* arrow function */{
 	            if (response.body.result === true) {
 	                //set Cookies
-	                localStorage.setItem('userLoggedIn', 'true');
+	                sessionStorage.setItem('userLoggedIn', 'true');
 
 	                _this2.loggedIn = true;
 	                defer.resolve();
@@ -32937,11 +32993,13 @@
 	        var defer = Q.defer();
 
 	        Superagent.get(Settings.host + Settings.api + '/game/status').set('Accept', 'application/json').end(function (error, response) /* arrow function */{
-	            _this3.gameId = JSON.parse(response.text).id;
+	            var data = JSON.parse(response.text);
+
+	            _this3.gameId = data.id;
 
 	            if (!error) {
 	                _this3.loggedIn = true;
-	                defer.resolve();
+	                defer.resolve(data);
 	            } else {
 	                _this3.loggedIn = false;
 	                defer.reject();
@@ -32970,22 +33028,50 @@
 	            });
 	        });
 	    };
-	    Game.prototype.timeOut = function () {
+
+	    Game.prototype.getGameHistory = function () {
 	        var _this5 = this;
 
 	        return Q.promise(function (resolve, reject) {
-	            Superagent.get(Settings.host + Settings.api + '/game/over/timeup').set('Accept', 'application/json').query({
+	            Superagent.get(Settings.host + Settings.api + '/game/story').set('Accept', 'application/json').query({
 	                game_id: _this5.gameId
 	            }).end(function (error, response) {
 	                if (error) {
 	                    return reject(error);
 	                }
+	                if (response.body.length) {
+	                    var lastCity = response.body[response.body.length - 1].city;
 
-	                _this5.timeOutCode = response.body.gameStatus.code;
-
-	                _this5.changeGameWasStarted(false);
+	                    _this5.continueButtonPointerEvents = '';
+	                    _this5.gameHistory = response.body;
+	                    _this5.lastLetterGameHistory = lastCity.name[lastCity.name.length - 1].toUpperCase();
+	                    _this5.regionId = lastCity.regionId;
+	                    _this5.topPosition = lastCity.x;
+	                    _this5.leftPosition = lastCity.y;
+	                    _this5.cityName = lastCity.name;
+	                }
 
 	                resolve(_this5.timeOutCode);
+	            });
+	        });
+	    };
+
+	    Game.prototype.timeOut = function () {
+	        var _this6 = this;
+
+	        return Q.promise(function (resolve, reject) {
+	            Superagent.get(Settings.host + Settings.api + '/game/over/timeup').set('Accept', 'application/json').query({
+	                game_id: _this6.gameId
+	            }).end(function (error, response) {
+	                if (error) {
+	                    return reject(error);
+	                }
+
+	                _this6.timeOutCode = response.body.gameStatus.code;
+
+	                _this6.changeGameWasStarted(false);
+
+	                resolve(_this6.timeOutCode);
 	            });
 	        });
 	    };
@@ -32998,23 +33084,24 @@
 	    };
 
 	    Game.prototype.changeGameWasStarted = function (value) {
+	        console.log(value);
 	        this.gameWasStarted = value;
 	    };
 
 	    Game.prototype.logOut = function () {
-	        var _this6 = this;
+	        var _this7 = this;
 
 	        var defer = Q.defer();
 
 	        Superagent.get(Settings.host + Settings.api + '/logout').set('Accept', 'application/json').end(function (error, response) /* arrow function */{
 	            if (!error) {
-	                _this6.loggedIn = false;
+	                _this7.loggedIn = false;
 	                //set Cookies
-	                localStorage.setItem('userLoggedIn', 'false');
+	                sessionStorage.setItem('userLoggedIn', 'false');
 	                location.href = '#/login';
 	                defer.resolve();
 	            } else {
-	                _this6.loggedIn = true;
+	                _this7.loggedIn = true;
 	                defer.reject();
 	            }
 	        });
@@ -33045,15 +33132,21 @@
 	    };
 
 	    Game.prototype.triggerChangeGameId = function () {
-	        var _this7 = this;
+	        var _this8 = this;
 
 	        if (!this.callbacks) {
 	            return;
 	        }
 
 	        this.callbacks.forEach(function (callback) {
-	            callback(_this7.gameId);
+	            callback(_this8.gameId);
 	        });
+	    };
+
+	    Game.prototype.getRegion = function (index) {
+	        var regions = ['Запорожская', 'Днепропетровская', 'Херсонская', 'Одесская', 'Автономная Республика Крым', 'Николаевская', 'Кировоградская', 'Донецкая', 'Луганская', 'Харьковская', 'Сумская', 'Полтавская', 'Черкасская', 'Винницкая', 'Черниговская', 'Киевская', 'Житомирская', 'Хмельницкая', 'Черновицкая', 'Тернопольская', 'Ровенская', 'Волынская', 'Ивано-Франковская', 'Львовская', 'Закарпатская'];
+
+	        return index === 5 ? regions[index - 1] : regions[index - 1] + ' область';
 	    };
 
 	    return Game;
@@ -33104,7 +33197,7 @@
 	            }
 	        },
 
-	        onButtonClick: function onButtonClick(event) {
+	        onFormSubmit: function onFormSubmit(event) {
 	            var _this = this;
 
 	            var login = this.state.login,
@@ -33170,44 +33263,48 @@
 	                        )
 	                    ),
 	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u041B\u043E\u0433\u0438\u043D', onChange: this.onInputChange.bind(this, 'login') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'password', className: 'register_input_style', placeholder: '\u041F\u0430\u0440\u043E\u043B\u044C', onChange: this.onInputChange.bind(this, 'password') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'email', className: 'register_input_style', placeholder: 'Email', onChange: this.onInputChange.bind(this, 'email') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0418\u043C\u044F(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'name') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0424\u0430\u043C\u0438\u043B\u0438\u044F(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'surname') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0413\u043E\u0440\u043E\u0434(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'city') })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'warning-message' },
-	                        this.state.warningMessage
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        React.createElement('input', { type: 'submit', className: 'register_submit', onClick: this.onButtonClick, value: '\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F' })
+	                        'form',
+	                        { onSubmit: this.onFormSubmit },
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u041B\u043E\u0433\u0438\u043D', onChange: this.onInputChange.bind(this, 'login') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'password', className: 'register_input_style', placeholder: '\u041F\u0430\u0440\u043E\u043B\u044C', onChange: this.onInputChange.bind(this, 'password') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'email', className: 'register_input_style', placeholder: 'Email', onChange: this.onInputChange.bind(this, 'email') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0418\u043C\u044F(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'name') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0424\u0430\u043C\u0438\u043B\u0438\u044F(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'surname') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'text', className: 'register_input_style', placeholder: '\u0413\u043E\u0440\u043E\u0434(\u043E\u043F\u0446\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E)', onChange: this.onInputChange.bind(this, 'city') })
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'warning-message' },
+	                            this.state.warningMessage
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            React.createElement('input', { type: 'submit', className: 'register_submit', value: '\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F' })
+	                        )
 	                    )
 	                )
 	            );
@@ -33238,6 +33335,53 @@
 	                )
 	            );
 	        }
+	    });
+	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(34), __webpack_require__(196), __webpack_require__(268)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React, SideBar, CityList, RecordsTable) {
+
+	    return React.createClass({
+
+	        displayName: 'Records',
+
+	        render: function render() {
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(SideBar, { game: this.props.game }),
+	                React.createElement(RecordsTable, null),
+	                React.createElement(CityList, { game: this.props.game })
+	            );
+	        }
+	    });
+	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function (React) {
+
+	    return React.createClass({
+
+	        displayName: 'RecordsTable',
+
+	        render: function render() {
+	            return React.createElement(
+	                'div',
+	                { className: 'records' },
+	                'records'
+	            );
+	        }
+
 	    });
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
