@@ -15,6 +15,7 @@ import ua.org.ecity.entities.GameInfo;
 import ua.org.ecity.entities.GameStatistic;
 import ua.org.ecity.entities.GameStatus;
 import ua.org.ecity.entities.MoveResult;
+import ua.org.ecity.entities.Records;
 import ua.org.ecity.entities.User;
 import ua.org.ecity.services.CityService;
 import ua.org.ecity.services.GameService;
@@ -55,7 +56,8 @@ public class GameController {
   }
 
   @RequestMapping("/records")
-  public List<User> gameRecords() {
+  //public List<User> gameRecords() {
+  public List<Records> gameRecords() {
     return userService.gameRecords();
     //return gameStatisticService.getGameStatisticsByGame(gameService.getGame(gameId));
   }

@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.org.ecity.entities.GameStatus;
+import ua.org.ecity.entities.Records;
 import ua.org.ecity.entities.User;
 import ua.org.ecity.entities.UserRoles;
 import ua.org.ecity.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +35,14 @@ public class UserService {
 
     }
 
-    public List<User> gameRecords() {
-        return userRepository.findAll();
+    public List<Records> gameRecords() {
+        List<User> users = userRepository.findAll();
+        List<Records> recordses = new ArrayList<Records>();
+        for (User user : users) {
+            recordses.add(new Records(user.getLogin(), user.getCounterwin(), user.getCounterloss()));
+        }
+
+        return recordses;
     }
 
 

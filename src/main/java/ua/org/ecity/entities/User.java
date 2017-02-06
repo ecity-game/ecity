@@ -36,6 +36,12 @@ public class User {
         this.citylives = citylives;
     }
 
+    public User(String username, Integer counterwin, Integer counterloss) {
+        this.username = username;
+        this.counterwin = counterwin;
+        this.counterloss = counterloss;
+    }
+
     public int getCounterwin() {
         return counterwin;
     }
