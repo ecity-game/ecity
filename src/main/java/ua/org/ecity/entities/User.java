@@ -17,6 +17,11 @@ public class User {
     private String email;
     private String lastname;
     private String citylives;
+    @Column(name = "counterwin")
+    private Integer counterwin;
+    @Column(name = "counterloss")
+    private Integer counterloss;
+
 
     public User() {
     }
@@ -29,6 +34,22 @@ public class User {
         this.email = email;
         this.lastname = lastname;
         this.citylives = citylives;
+    }
+
+    public int getCounterwin() {
+        return counterwin;
+    }
+
+    public void setCounterwin(int counterwin) {
+        this.counterwin = counterwin;
+    }
+
+    public int getCounterloss() {
+        return counterloss;
+    }
+
+    public void setCounterloss(int counterloss) {
+        this.counterloss = counterloss;
     }
 
     public String getEmail() {
@@ -93,5 +114,14 @@ public class User {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", counterwin=" + counterwin +
+                ", counterloss=" + counterloss +
+                '}';
     }
 }

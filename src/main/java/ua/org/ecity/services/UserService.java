@@ -8,6 +8,7 @@ import ua.org.ecity.entities.User;
 import ua.org.ecity.entities.UserRoles;
 import ua.org.ecity.repository.UserRepository;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,10 @@ public class UserService {
         boolean matches = matcher.matches();
         return matches;
 
+    }
+
+    public List<User> gameRecords() {
+        return userRepository.findAll();
     }
 
 
