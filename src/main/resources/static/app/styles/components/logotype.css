@@ -1,0 +1,10 @@
+.logo input {
+    height: 135px;
+}
+.logo {
+    text-align: center;
+}
+.login .logo,
+.register .logo {
+    padding: 15px 0;
+}
