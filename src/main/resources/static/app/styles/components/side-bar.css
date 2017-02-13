@@ -7,7 +7,7 @@
     padding: 20px 35px;
 }
 .side-bar div:last-child {
-    height: 387px;
+    height: 338px;
 }
 .side-bar a {
     text-decoration: none;
@@ -22,9 +22,11 @@
 }
 
 
+/*
 .side-bar .logo {
     text-align: center;
 }
+*/
 /*
 .side-bar .logo {
     color: #f8f8f8;
@@ -39,12 +41,12 @@
 */
 
 @media screen and (max-width: 1300px){
-    .side-bar a {
+    .side-bar a, .side-bar .logo p{
         font-size: 20px;
     }
 }
 @media screen and (max-width: 1000px){
-    .side-bar a {
+    .side-bar a, .side-bar .logo p{
         font-size: 16px;
     }
 }
