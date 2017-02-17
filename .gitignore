@@ -1,10 +1,7 @@
 logs/
 
 .gradle
-gradle/
 /build/
-!gradle/wrapper/gradle-wrapper.jar
-gradlew
 gradlew.bat
 
 ### STS ###
